@@ -1,1 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mercadão dos Medicamentos — Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  /* Mercadão: Azul */
+  --g0:#0a1f5c; --g1:#1035a0; --g2:#1a4cc8; --g3:#2d6ef5; --g4:#6699ff;
+  /* Catatau: Laranja + Roxo */
+  --cat-orange:#e8590a; --cat-purple:#6b2fa0; --cat-light-o:#fff2ea; --cat-light-p:#f3eaff;
+  /* Comuns */
+  --gold:#f5c842; --orange:#f58a1f; --red:#e05252; --blue:#2d6ef5;
+  --bg:#f0f3fa; --surface:#fff; --s2:#e8edf8; --s3:#d8e2f5;
+  --text:#0a0e1a; --mid:#2a3a6a; --light:#6a7aaa; --border:#ccd5ee;
+  --sh:0 4px 24px rgba(10,31,92,.10);
+  --r:16px; --r-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
 
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.anim-fade{animation:fadeIn .3s ease both}
+.anim-up{animation:fadeUp .4s ease both}
+
+/* ═══ SCREEN SYSTEM ═══ */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;}
+
+/* ══════════════════════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════════════════════ */
+#screen-login{
+  align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#050e2e 0%,#0a1f5c 50%,#1035a0 100%);
+  padding:20px;
+  position:relative;overflow:hidden;
+}
+#screen-login::before{
+  content:'';position:absolute;width:600px;height:600px;border-radius:50%;
+  background:rgba(255,255,255,.03);top:-200px;right:-200px;
+}
+#screen-login::after{
+  content:'';position:absolute;width:400px;height:400px;border-radius:50%;
+  background:rgba(45,110,245,.08);bottom:-150px;left:-100px;
+}
+.login-box{
+  background:var(--surface);border-radius:24px;
+  width:100%;max-width:420px;
+  box-shadow:0 24px 64px rgba(0,0,0,.25);
+  overflow:hidden;animation:fadeUp .5s ease;
+  position:relative;z-index:1;
+}
+.login-header{
+  background:linear-gradient(120deg,#050e2e,#1035a0);
+  padding:32px 32px 24px;text-align:center;
+}
+.login-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:22px;
+  color:#fff;letter-spacing:-.01em;
+}
+.login-logo span{color:var(--gold);}
+.login-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;letter-spacing:.04em;text-transform:uppercase;}
+.login-body{padding:32px;}
+.login-body h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.login-body p{font-size:13px;color:var(--light);margin-bottom:24px;}
+.field-group{margin-bottom:16px;}
+.field-group label{display:block;font-size:12px;font-weight:600;color:var(--mid);margin-bottom:6px;letter-spacing:.02em;}
+.field-group input,.field-group select{
+  width:100%;padding:11px 14px;border-radius:var(--r-sm);
+  border:1.5px solid var(--border);background:var(--s2);
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);
+  transition:border .15s,background .15s;outline:none;
+}
+.field-group input:focus,.field-group select:focus{border-color:var(--g3);background:#fff;}
+.login-hint{
+  font-size:11px;color:var(--light);margin-bottom:20px;
+  background:var(--s2);border-radius:8px;padding:10px 12px;
+  line-height:1.7;
+}
+.login-hint strong{color:var(--mid);}
+.btn-login{
+  width:100%;padding:13px;border-radius:var(--r-sm);
+  background:linear-gradient(90deg,#0a1f5c,#2d6ef5);
+  color:#fff;border:none;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  letter-spacing:.02em;transition:opacity .15s,transform .15s;
+}
+.btn-login:hover{opacity:.9;transform:translateY(-1px);}
+.btn-login:active{transform:translateY(0);}
+.login-error{
+  color:var(--red);font-size:12px;margin-top:10px;
+  text-align:center;display:none;
+}
+
+/* ══════════════════════════════════════════════
+   APP LAYOUT
+══════════════════════════════════════════════ */
+#screen-app{flex-direction:row;}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;min-height:100vh;background:#050e2e;
+  display:flex;flex-direction:column;position:fixed;
+  top:0;left:0;bottom:0;z-index:200;
+  transition:transform .3s ease;
+}
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:190;opacity:0;transition:opacity .3s;
+}
+.sidebar-top{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--g4);letter-spacing:.03em;text-transform:uppercase;}
+.sb-brand span{color:var(--gold);}
+.sb-sub{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;letter-spacing:.05em;text-transform:uppercase;}
+.sb-user{padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;flex-shrink:0;}
+.sb-info .sb-name{font-size:13px;font-weight:500;color:#fff;}
+.sb-info .sb-role{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px;}
+.sb-badge{
+  font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;
+  margin-top:3px;display:inline-block;letter-spacing:.04em;text-transform:uppercase;
+}
+.badge-admin{background:var(--gold);color:#050e2e;}
+.badge-dir{background:#9b59f5;color:#fff;}
+.badge-ger{background:var(--blue);color:#fff;}
+.badge-col{background:var(--g3);color:#fff;}
+
+.sb-nav{flex:1;padding:12px 10px;overflow-y:auto;}
+.sb-section{font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.1em;text-transform:uppercase;padding:10px 10px 5px;}
+.sb-item{
+  display:flex;align-items:center;gap:9px;padding:9px 12px;
+  border-radius:8px;cursor:pointer;transition:background .15s,color .15s;
+  font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;
+  margin-bottom:1px;
+}
+.sb-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.sb-item.active{background:var(--g2);color:#fff;font-weight:500;}
+.sb-item .si{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.sb-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);font-size:10px;color:rgba(255,255,255,.18);}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* TOPBAR */
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:14px 28px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;
+}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.hamburger{
+  display:none;width:36px;height:36px;border-radius:8px;
+  background:var(--s2);border:none;cursor:pointer;
+  font-size:18px;align-items:center;justify-content:center;
+}
+.tb-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--g0);}
+.tb-title span{color:var(--g3);}
+.tb-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.period-sel{display:flex;background:var(--s2);border-radius:8px;padding:3px;gap:2px;}
+.period-btn{font-size:11px;padding:5px 12px;border-radius:6px;border:none;cursor:pointer;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s;white-space:nowrap;}
+.period-btn.active{background:#050e2e;color:#fff;}
+.icon-btn{width:34px;height:34px;border-radius:8px;background:var(--s2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;flex-shrink:0;}
+.notif-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);position:absolute;top:5px;right:5px;border:2px solid var(--surface);}
+
+/* PAGE CONTENT */
+.page{display:none;padding:24px 28px;flex:1;}
+.page.active{display:block;animation:fadeUp .35s ease;}
+
+/* ══════════════════════════════════════════════
+   CARDS & COMPONENTS
+══════════════════════════════════════════════ */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+.sec-link{font-size:12px;color:var(--g3);cursor:pointer;font-weight:500;}
+
+/* WELCOME BANNER */
+.banner{
+  background:linear-gradient(120deg,#050e2e 0%,#0a1f5c 55%,#1a4cc8 100%);
+  border-radius:var(--r);padding:24px 28px;display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:24px;position:relative;overflow:hidden;gap:16px;
+}
+.banner::before{content:'';position:absolute;right:-50px;top:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.04);}
+.banner-text h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:5px;}
+.banner-text p{font-size:13px;color:rgba(255,255,255,.6);}
+.banner-score{text-align:center;background:rgba(255,255,255,.1);border-radius:12px;padding:14px 20px;position:relative;z-index:1;flex-shrink:0;backdrop-filter:blur(4px);}
+.score-val{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;color:var(--gold);line-height:1;}
+.score-lbl{font-size:10px;color:rgba(255,255,255,.55);margin-top:3px;text-transform:uppercase;letter-spacing:.05em;}
+.score-tag{display:inline-block;background:var(--gold);color:var(--g0);font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;margin-top:5px;font-family:'Syne',sans-serif;}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.kpi-card{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;cursor:default;}
+.kpi-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(10,31,92,.14);}
+.kpi-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px;}
+.kpi-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1;}
+.kpi-lbl{font-size:11px;color:var(--light);margin-top:3px;}
+.kpi-delta{font-size:11px;font-weight:500;margin-top:8px;display:flex;align-items:center;gap:3px;}
+.up{color:var(--g3);} .dn{color:var(--red);}
+.kpi-bar{height:4px;border-radius:4px;background:var(--s2);margin-top:10px;overflow:hidden;}
+.kpi-fill{height:100%;border-radius:4px;}
+.ig{background:#e0eaff;} .igo{background:#fdf6dc;} .ioo{background:#fff0e0;} .ibl{background:#e8f1fb;}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:24px;}
+.chart-card{background:var(--surface);border-radius:var(--r);padding:22px;box-shadow:var(--sh);}
+.chart-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.chart-sub{font-size:11px;color:var(--light);margin-bottom:18px;}
+
+/* BAR CHART */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:130px;}
+.bar-group{display:flex;flex-direction:column;align-items:center;flex:1;gap:5px;}
+.bar-wrap{width:100%;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:110px;}
+.bar{width:42%;border-radius:5px 5px 0 0;cursor:pointer;position:relative;transition:opacity .15s;}
+.bar:hover{opacity:.8;}
+.bar-lbl{font-size:9px;color:var(--light);text-align:center;}
+.chart-legend{display:flex;gap:14px;margin-top:10px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--light);}
+.leg-dot{width:9px;height:9px;border-radius:2px;}
+
+/* DONUT */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;}
+.donut-legend{width:100%;display:flex;flex-direction:column;gap:7px;margin-top:10px;}
+.leg-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
+.leg-l{display:flex;align-items:center;gap:6px;color:var(--mid);}
+.leg-d{width:8px;height:8px;border-radius:50%;}
+.leg-v{font-weight:600;color:var(--text);}
+
+/* GOALS */
+.goals-list{display:flex;flex-direction:column;gap:13px;}
+.goal-hdr{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
+.goal-name{color:var(--text);font-weight:500;}
+.goal-pct{color:var(--light);}
+.goal-track{height:8px;background:var(--s2);border-radius:8px;overflow:hidden;}
+.goal-fill{height:100%;border-radius:8px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+
+/* RANKING */
+.ranking-list{display:flex;flex-direction:column;gap:8px;}
+.rank-item{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--s2);border-radius:11px;transition:background .15s;}
+.rank-item:hover{background:var(--s3);}
+.rank-item.me{background:linear-gradient(90deg,#e0eaff,#ccdaff);border:1.5px solid #99b8ff;}
+.rk-num{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--light);width:20px;text-align:center;flex-shrink:0;}
+.rk-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--g0);flex-shrink:0;}
+.rk-info{flex:1;}
+.rk-name{font-size:12px;font-weight:500;color:var(--text);}
+.rk-role{font-size:10px;color:var(--light);}
+.rk-sc{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--g0);}
+.me-tag{font-size:9px;font-weight:700;background:var(--g3);color:#fff;padding:1px 6px;border-radius:8px;margin-left:3px;}
+
+/* FILIAIS TABLE */
+.filiais-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px;}
+.filial-card{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--sh);cursor:pointer;transition:transform .2s,box-shadow .2s;border-left:4px solid var(--g3);}
+.filial-card.catatau{border-left:0;border-top:4px solid var(--cat-orange);border-right:4px solid var(--cat-purple);position:relative;}
+.filial-card.catatau::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--cat-orange),var(--cat-purple));border-radius:var(--r) 0 0 var(--r);}
+.filial-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(10,31,92,.14);}
+.filial-card.catatau:hover{box-shadow:0 8px 28px rgba(107,47,160,.18);}
+.filial-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.filial-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+.filial-bandeira{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600;letter-spacing:.03em;}
+.fb-blue{background:#e0eaff;color:var(--g2);}
+.fb-cat{background:linear-gradient(90deg,var(--cat-light-o),var(--cat-light-p));color:var(--cat-purple);border:1px solid #e0c8f8;}
+.filial-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.fs-item{text-align:center;}
+.fs-val{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.fs-lbl{font-size:10px;color:var(--light);}
+.filial-bar{height:5px;background:var(--s2);border-radius:5px;overflow:hidden;margin-top:10px;}
+.filial-fill{height:100%;border-radius:5px;background:var(--g3);transition:width 1.2s;}
+.filial-card.catatau .filial-fill{background:linear-gradient(90deg,var(--cat-orange),var(--cat-purple));}
+
+/* TABLE */
+.table-wrap{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:24px;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--s2);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--mid);padding:11px 16px;text-align:left;letter-spacing:.04em;text-transform:uppercase;}
+td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--s2);color:var(--text);vertical-align:middle;}
+tr:last-child td{border:none;}
+tr:hover td{background:var(--s2);}
+.td-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;display:inline-block;}
+.td-score{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
+.score-high{color:var(--g2);}
+.score-mid{color:var(--orange);}
+.score-low{color:var(--red);}
+
+/* PERFIL */
+.perfil-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;}
+.perfil-card{background:var(--surface);border-radius:var(--r);padding:24px;box-shadow:var(--sh);text-align:center;}
+.perfil-avatar-lg{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:700;margin:0 auto 14px;}
+.perfil-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.perfil-role{font-size:13px;color:var(--light);}
+.perfil-info{margin-top:16px;text-align:left;display:flex;flex-direction:column;gap:10px;}
+.pi-row{display:flex;justify-content:space-between;font-size:12px;padding-bottom:10px;border-bottom:1px solid var(--s2);}
+.pi-row:last-child{border:none;}
+.pi-lbl{color:var(--light);}
+.pi-val{font-weight:500;color:var(--text);}
+.perfil-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+.btn-outline{padding:9px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;}
+.btn-outline:hover{border-color:var(--g3);color:var(--g2);}
+.btn-primary{padding:9px;border-radius:8px;border:none;background:var(--g2);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;font-weight:500;transition:opacity .15s;}
+.btn-primary:hover{opacity:.85;}
+
+/* HEADER ACTIONS */
+.filter-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.filter-select{padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--mid);outline:none;cursor:pointer;}
+.filter-select:focus{border-color:var(--g3);}
+.search-box{padding:8px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;flex:1;min-width:160px;}
+.search-box:focus{border-color:var(--g3);}
+
+/* ══════════════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════════════ */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;opacity:1;}
+  .main{margin-left:0;}
+  .hamburger{display:flex;}
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .charts-row{grid-template-columns:1fr;}
+  .filiais-grid{grid-template-columns:1fr;}
+  .perfil-grid{grid-template-columns:1fr;}
+  .bottom-row{grid-template-columns:1fr;}
+  .period-sel .period-btn:nth-child(1){display:none;}
+  .topbar{padding:12px 16px;}
+  .page{padding:16px;}
+  .banner{flex-direction:column;text-align:center;}
+  .banner-score{width:100%;}
+  table{font-size:12px;}
+  th,td{padding:9px 12px;}
+}
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .kpi-val{font-size:20px;}
+}
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;right:24px;background:#050e2e;color:#fff;
+  padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;
+  box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:9999;
+  animation:fadeUp .3s ease;display:none;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="screen-login" class="screen active">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="login-logo">Mercadão<span>+</span> Portal</div>
+      <div class="login-sub">Sistema de Desempenho</div>
+    </div>
+    <div class="login-body">
+      <h2>Bem-vindo de volta 👋</h2>
+      <p>Faça login para acessar seu painel</p>
+      <div class="field-group">
+        <label>USUÁRIO</label>
+        <input type="text" id="inp-user" placeholder="seu.nome@mercadao.com.br"/>
+      </div>
+      <div class="field-group">
+        <label>SENHA</label>
+        <input type="password" id="inp-pass" placeholder="••••••••"/>
+      </div>
+      <div class="login-hint">
+        <strong>Usuários de demonstração:</strong><br>
+        👑 <strong>admin</strong> / 1234 — Administrador<br>
+        📊 <strong>diretoria</strong> / 1234 — Diretoria<br>
+        🏪 <strong>gerente</strong> / 1234 — Gerente de Filial<br>
+        💊 <strong>joao</strong> / 1234 — Colaborador
+      </div>
+      <button class="btn-login" onclick="doLogin()">Entrar</button>
+      <div class="login-error" id="login-error">❌ Usuário ou senha incorretos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="screen-app" class="screen">
+
+  <!-- Overlay mobile -->
+  <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="sb-brand">Mercadão<span>+</span></div>
+      <div class="sb-sub">Portal do Colaborador</div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar" style="background:#e6f7ee;color:#0a4f2e;"></div>
+      <div class="sb-info">
+        <div class="sb-name" id="sb-name"></div>
+        <div class="sb-role" id="sb-role"></div>
+        <div class="sb-badge" id="sb-badge"></div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-footer">© 2025 Mercadão dos Medicamentos</div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <div class="tb-title" id="tb-title">Painel</div>
+      </div>
+      <div class="tb-right">
+        <div class="period-sel">
+          <button class="period-btn" onclick="setPeriod(this)">Semana</button>
+          <button class="period-btn active" onclick="setPeriod(this)">Mês</button>
+          <button class="period-btn" onclick="setPeriod(this)">Trimestre</button>
+        </div>
+        <button class="icon-btn">🔔<span class="notif-dot"></span></button>
+        <button class="icon-btn" onclick="doLogout()" title="Sair">🚪</button>
+      </div>
+    </div>
+
+    <!-- PAGE: COLABORADOR - MEU DESEMPENHO -->
+    <div class="page" id="page-col-dash">
+      <div class="banner">
+        <div class="banner-text">
+          <h2>Seu desempenho está acima da média! 🚀</h2>
+          <p>Confira seus indicadores — Abril 2025 · Filial SP-03</p>
+        </div>
+        <div class="banner-score">
+          <div class="score-val">92</div>
+          <div class="score-lbl">Score Geral</div>
+          <div class="score-tag">⭐ Destaque</div>
+        </div>
+      </div>
+      <div class="sec-hdr"><div class="sec-title">Indicadores de Desempenho</div><div class="sec-link">Ver todos →</div></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon ig">💊</div><div class="kpi-val">R$48,2k</div><div class="kpi-lbl">Vendas do Mês</div><div class="kpi-delta up">▲ 12% vs mês anterior</div><div class="kpi-bar"><div class="kpi-fill" style="width:78%;background:var(--g3)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon igo">⭐</div><div class="kpi-val">97%</div><div class="kpi-lbl">Satisfação NPS</div><div class="kpi-delta up">▲ 3% vs mês anterior</div><div class="kpi-bar"><div class="kpi-fill" style="width:97%;background:var(--gold)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ioo">📦</div><div class="kpi-val">342</div><div class="kpi-lbl">Atendimentos</div><div class="kpi-delta dn">▼ 4% vs mês anterior</div><div class="kpi-bar"><div class="kpi-fill" style="width:62%;background:var(--orange)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ibl">🔄</div><div class="kpi-val">8,4%</div><div class="kpi-lbl">Taxa Conversão</div><div class="kpi-delta up">▲ 1,2% vs mês anterior</div><div class="kpi-bar"><div class="kpi-fill" style="width:84%;background:var(--blue)"></div></div></div>
+      </div>
+        <div class="chart-card">
+          <div class="chart-title">Vendas por Semana</div>
+          <div class="chart-sub">Realizado vs Meta — Abril 2025</div>
+          <div class="bar-chart">
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:72px;background:var(--g3)"></div><div class="bar" style="height:60px;background:var(--s2)"></div></div><div class="bar-lbl">Sem 1</div></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:88px;background:var(--g3)"></div><div class="bar" style="height:60px;background:var(--s2)"></div></div><div class="bar-lbl">Sem 2</div></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:64px;background:var(--g3)"></div><div class="bar" style="height:60px;background:var(--s2)"></div></div><div class="bar-lbl">Sem 3</div></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:80px;background:var(--gold)"></div><div class="bar" style="height:60px;background:var(--s2)"></div></div><div class="bar-lbl">Sem 4</div></div>
+          </div>
+          <div class="chart-legend"><div class="leg-item"><div class="leg-dot" style="background:var(--g3)"></div>Realizado</div><div class="leg-item"><div class="leg-dot" style="background:var(--s3)"></div>Meta</div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Vendas por Categoria</div>
+          <div class="chart-sub">Participação no mês</div>
+          <div class="donut-wrap">
+            <svg width="110" height="110" viewBox="0 0 110 110">
+              <circle cx="55" cy="55" r="44" fill="none" stroke="#eef2ea" stroke-width="17"/>
+              <circle cx="55" cy="55" r="44" fill="none" stroke="var(--g3)" stroke-width="17" stroke-dasharray="144 132" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+              <circle cx="55" cy="55" r="44" fill="none" stroke="var(--gold)" stroke-width="17" stroke-dasharray="66 210" stroke-dashoffset="-144" transform="rotate(-90 55 55)"/>
+              <circle cx="55" cy="55" r="44" fill="none" stroke="var(--orange)" stroke-width="17" stroke-dasharray="39 237" stroke-dashoffset="-210" transform="rotate(-90 55 55)"/>
+              <circle cx="55" cy="55" r="44" fill="none" stroke="var(--blue)" stroke-width="17" stroke-dasharray="27 249" stroke-dashoffset="-249" transform="rotate(-90 55 55)"/>
+              <text x="55" y="51" text-anchor="middle" font-family="Syne,sans-serif" font-size="14" font-weight="800" fill="var(--g0)">52%</text>
+              <text x="55" y="63" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="var(--light)">Medicamentos</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="leg-row"><div class="leg-l"><div class="leg-d" style="background:var(--g3)"></div>Medicamentos</div><div class="leg-v">52%</div></div>
+              <div class="leg-row"><div class="leg-l"><div class="leg-d" style="background:var(--gold)"></div>Dermocosméticos</div><div class="leg-v">24%</div></div>
+              <div class="leg-row"><div class="leg-l"><div class="leg-d" style="background:var(--orange)"></div>Higiene</div><div class="leg-v">14%</div></div>
+              <div class="leg-row"><div class="leg-l"><div class="leg-d" style="background:var(--blue)"></div>Outros</div><div class="leg-v">10%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-row">
+        <div class="chart-card">
+          <div class="chart-title">Metas do Mês</div>
+          <div class="chart-sub">Progresso das metas individuais</div>
+          <div class="goals-list">
+            <div><div class="goal-hdr"><span class="goal-name">💊 Meta de Vendas</span><span class="goal-pct">80%</span></div><div class="goal-track"><div class="goal-fill" style="width:80%;background:var(--g3)"></div></div></div>
+            <div><div class="goal-hdr"><span class="goal-name">😊 Satisfação NPS</span><span class="goal-pct">100%</span></div><div class="goal-track"><div class="goal-fill" style="width:100%;background:var(--gold)"></div></div></div>
+            <div><div class="goal-hdr"><span class="goal-name">🔄 Conversão</span><span class="goal-pct">84%</span></div><div class="goal-track"><div class="goal-fill" style="width:84%;background:var(--blue)"></div></div></div>
+            <div><div class="goal-hdr"><span class="goal-name">📦 Atendimentos</span><span class="goal-pct">86%</span></div><div class="goal-track"><div class="goal-fill" style="width:86%;background:var(--orange)"></div></div></div>
+            <div><div class="goal-hdr"><span class="goal-name">📚 Treinamentos</span><span class="goal-pct">100%</span></div><div class="goal-track"><div class="goal-fill" style="width:100%;background:var(--g3)"></div></div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Ranking Filial SP-03</div>
+          <div class="chart-sub">Score de desempenho do mês</div>
+          <div class="ranking-list">
+            <div class="rank-item"><div class="rk-num">🥇</div><div class="rk-av" style="background:#fdf6dc">MC</div><div class="rk-info"><div class="rk-name">Maria Costa</div><div class="rk-role">Farmacêutica</div></div><div class="rk-sc">96</div></div>
+            <div class="rank-item"><div class="rk-num">🥈</div><div class="rk-av" style="background:#f0f4f8">PT</div><div class="rk-info"><div class="rk-name">Pedro Torres</div><div class="rk-role">Atendente</div></div><div class="rk-sc">94</div></div>
+            <div class="rank-item me"><div class="rk-num">🥉</div><div class="rk-av" style="background:#e0eaff">JS</div><div class="rk-info"><div class="rk-name">João Silva <span class="me-tag">Você</span></div><div class="rk-role">Farmacêutico</div></div><div class="rk-sc">92</div></div>
+            <div class="rank-item"><div class="rk-num">4</div><div class="rk-av" style="background:#fde8f3">AL</div><div class="rk-info"><div class="rk-name">Ana Lima</div><div class="rk-role">Atendente</div></div><div class="rk-sc">88</div></div>
+            <div class="rank-item"><div class="rk-num">5</div><div class="rk-av" style="background:#e8f0fb">RM</div><div class="rk-info"><div class="rk-name">Rafael Mendes</div><div class="rk-role">Estoquista</div></div><div class="rk-sc">83</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: HISTÓRICO COLABORADOR -->
+    <div class="page" id="page-col-hist">
+      <div class="sec-hdr"><div class="sec-title">Meu Histórico de Desempenho</div></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon ig">📅</div><div class="kpi-val">Jan</div><div class="kpi-lbl">Score: 88</div><div class="kpi-delta up">▲ Acima da meta</div><div class="kpi-bar"><div class="kpi-fill" style="width:88%;background:var(--g3)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ig">📅</div><div class="kpi-val">Fev</div><div class="kpi-lbl">Score: 85</div><div class="kpi-delta dn">▼ Abaixo da meta</div><div class="kpi-bar"><div class="kpi-fill" style="width:85%;background:var(--orange)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ig">📅</div><div class="kpi-val">Mar</div><div class="kpi-lbl">Score: 90</div><div class="kpi-delta up">▲ Acima da meta</div><div class="kpi-bar"><div class="kpi-fill" style="width:90%;background:var(--g3)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon igo">📅</div><div class="kpi-val">Abr</div><div class="kpi-lbl">Score: 92</div><div class="kpi-delta up">▲ Destaque</div><div class="kpi-bar"><div class="kpi-fill" style="width:92%;background:var(--gold)"></div></div></div>
+      </div>
+      <div class="chart-card" style="margin-bottom:20px">
+        <div class="chart-title">Evolução Mensal</div>
+        <div class="chart-sub">Score de desempenho — Janeiro a Abril 2025</div>
+        <div class="bar-chart" style="height:160px">
+          <div class="bar-group"><div class="bar-wrap" style="height:140px"><div class="bar" style="height:123px;background:var(--g3);width:60%"></div></div><div class="bar-lbl">Jan · 88</div></div>
+          <div class="bar-group"><div class="bar-wrap" style="height:140px"><div class="bar" style="height:119px;background:var(--orange);width:60%"></div></div><div class="bar-lbl">Fev · 85</div></div>
+          <div class="bar-group"><div class="bar-wrap" style="height:140px"><div class="bar" style="height:126px;background:var(--g3);width:60%"></div></div><div class="bar-lbl">Mar · 90</div></div>
+          <div class="bar-group"><div class="bar-wrap" style="height:140px"><div class="bar" style="height:129px;background:var(--gold);width:60%"></div></div><div class="bar-lbl">Abr · 92</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: MEU PERFIL -->
+    <div class="page" id="page-col-perfil">
+      <div class="sec-hdr"><div class="sec-title">Meu Perfil</div></div>
+      <div class="perfil-grid">
+        <div>
+          <div class="perfil-card">
+            <div class="perfil-avatar-lg" style="background:#e6f7ee;color:var(--g0)">JS</div>
+            <div class="perfil-name">João Silva</div>
+            <div class="perfil-role">Farmacêutico · Filial SP-03</div>
+            <div class="perfil-info">
+              <div class="pi-row"><span class="pi-lbl">Matrícula</span><span class="pi-val">MRC-00342</span></div>
+              <div class="pi-row"><span class="pi-lbl">Filial</span><span class="pi-val">SP-03 — Tatuapé</span></div>
+              <div class="pi-row"><span class="pi-lbl">Cargo</span><span class="pi-val">Farmacêutico</span></div>
+              <div class="pi-row"><span class="pi-lbl">Admissão</span><span class="pi-val">12/03/2021</span></div>
+              <div class="pi-row"><span class="pi-lbl">Score Atual</span><span class="pi-val" style="color:var(--g2);font-weight:700">92 ⭐</span></div>
+              <div class="pi-row"><span class="pi-lbl">Ranking</span><span class="pi-val">3º na filial</span></div>
+            </div>
+            <div class="perfil-actions">
+              <button class="btn-outline">✏️ Editar dados</button>
+              <button class="btn-outline">🔑 Alterar senha</button>
+              <button class="btn-primary" onclick="doLogout()">🚪 Sair</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Conquistas</div>
+          <div class="chart-sub">Seus badges e reconhecimentos</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px">
+            <div style="text-align:center;padding:16px;background:var(--s2);border-radius:12px"><div style="font-size:28px">🏆</div><div style="font-size:11px;font-weight:600;color:var(--text);margin-top:6px">Top 3 Filial</div><div style="font-size:10px;color:var(--light)">Abr 2025</div></div>
+            <div style="text-align:center;padding:16px;background:var(--s2);border-radius:12px"><div style="font-size:28px">⭐</div><div style="font-size:11px;font-weight:600;color:var(--text);margin-top:6px">NPS Perfeito</div><div style="font-size:10px;color:var(--light)">Mar 2025</div></div>
+            <div style="text-align:center;padding:16px;background:var(--s2);border-radius:12px"><div style="font-size:28px">📈</div><div style="font-size:11px;font-weight:600;color:var(--text);margin-top:6px">Crescimento</div><div style="font-size:10px;color:var(--light)">Q1 2025</div></div>
+            <div style="text-align:center;padding:16px;background:var(--s2);border-radius:12px"><div style="font-size:28px">📚</div><div style="font-size:11px;font-weight:600;color:var(--text);margin-top:6px">Treinamentos</div><div style="font-size:10px;color:var(--light)">Fev 2025</div></div>
+            <div style="text-align:center;padding:16px;background:var(--s2);border-radius:12px;opacity:.4"><div style="font-size:28px">🥇</div><div style="font-size:11px;font-weight:600;color:var(--text);margin-top:6px">1º da Filial</div><div style="font-size:10px;color:var(--light)">Em progresso</div></div>
+            <div style="text-align:center;padding:16px;background:var(--s2);border-radius:12px;opacity:.4"><div style="font-size:28px">💎</div><div style="font-size:11px;font-weight:600;color:var(--text);margin-top:6px">Score 95+</div><div style="font-size:10px;color:var(--light)">Em progresso</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: GERENTE - MINHA FILIAL -->
+    <div class="page" id="page-ger-dash">
+      <div class="banner">
+        <div class="banner-text">
+          <h2>Filial SP-03 — Tatuapé 🏪</h2>
+          <p>Visão gerencial da filial — Abril 2025</p>
+        </div>
+        <div class="banner-score">
+          <div class="score-val">87</div>
+          <div class="score-lbl">Score Filial</div>
+          <div class="score-tag">✅ Na Meta</div>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon ig">💰</div><div class="kpi-val">R$312k</div><div class="kpi-lbl">Faturamento Total</div><div class="kpi-delta up">▲ 9% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:78%;background:var(--g3)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon igo">👥</div><div class="kpi-val">12</div><div class="kpi-lbl">Colaboradores Ativos</div><div class="kpi-delta up">▲ 0 vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:var(--gold)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ioo">😊</div><div class="kpi-val">94%</div><div class="kpi-lbl">NPS Médio Filial</div><div class="kpi-delta up">▲ 2% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:94%;background:var(--orange)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ibl">🎯</div><div class="kpi-val">81%</div><div class="kpi-lbl">Meta Atingida</div><div class="kpi-delta dn">▼ 3% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:81%;background:var(--blue)"></div></div></div>
+      </div>
+      <div class="sec-hdr"><div class="sec-title">Desempenho dos Colaboradores — SP-03</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Colaborador</th><th>Cargo</th><th>Vendas</th><th>NPS</th><th>Atend.</th><th>Score</th></tr></thead>
+          <tbody>
+            <tr><td>🥇</td><td><strong>Maria Costa</strong></td><td>Farmacêutica</td><td>R$52k</td><td>99%</td><td>380</td><td class="td-score score-high">96</td></tr>
+            <tr><td>🥈</td><td><strong>Pedro Torres</strong></td><td>Atendente</td><td>R$49k</td><td>97%</td><td>365</td><td class="td-score score-high">94</td></tr>
+            <tr><td>🥉</td><td><strong>João Silva</strong></td><td>Farmacêutico</td><td>R$48k</td><td>97%</td><td>342</td><td class="td-score score-high">92</td></tr>
+            <tr><td>4</td><td>Ana Lima</td><td>Atendente</td><td>R$44k</td><td>93%</td><td>310</td><td class="td-score score-high">88</td></tr>
+            <tr><td>5</td><td>Rafael Mendes</td><td>Estoquista</td><td>R$38k</td><td>90%</td><td>290</td><td class="td-score score-mid">83</td></tr>
+            <tr><td>6</td><td>Carla Souza</td><td>Atendente</td><td>R$35k</td><td>88%</td><td>275</td><td class="td-score score-mid">79</td></tr>
+            <tr><td>7</td><td>Bruno Alves</td><td>Caixa</td><td>R$30k</td><td>85%</td><td>260</td><td class="td-score score-mid">74</td></tr>
+            <tr><td>8</td><td>Fernanda Rocha</td><td>Atendente</td><td>R$28k</td><td>82%</td><td>240</td><td class="td-score score-low">68</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE: DIRETORIA/ADMIN - VISÃO GERAL FILIAIS -->
+    <div class="page" id="page-dir-dash">
+      <div class="banner">
+        <div class="banner-text">
+          <h2>Visão Consolidada — Rede Completa 🏢</h2>
+          <p>12 filiais · 11 Mercadão dos Medicamentos + 1 Catatau Farma — Abril 2025</p>
+        </div>
+        <div class="banner-score">
+          <div class="score-val">84</div>
+          <div class="score-lbl">Score Rede</div>
+          <div class="score-tag">📊 Consolidado</div>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon ig">💰</div><div class="kpi-val">R$3,8M</div><div class="kpi-lbl">Faturamento Total Rede</div><div class="kpi-delta up">▲ 11% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:82%;background:var(--g3)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon igo">🏪</div><div class="kpi-val">12</div><div class="kpi-lbl">Filiais Ativas</div><div class="kpi-delta up">▲ 100% operacional</div><div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:var(--gold)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ioo">👥</div><div class="kpi-val">148</div><div class="kpi-lbl">Total Colaboradores</div><div class="kpi-delta up">▲ 3 novos este mês</div><div class="kpi-bar"><div class="kpi-fill" style="width:74%;background:var(--orange)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ibl">🎯</div><div class="kpi-val">79%</div><div class="kpi-lbl">Meta Rede Atingida</div><div class="kpi-delta dn">▼ 1% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:79%;background:var(--blue)"></div></div></div>
+      </div>
+      <div class="sec-hdr"><div class="sec-title">Desempenho por Filial</div><div class="sec-link">Exportar →</div></div>
+      <div class="filiais-grid" id="filiais-dinamico">
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-01 — Centro</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$410k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">91</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:91%"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-02 — Lapa</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$385k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">88</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:88%"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-03 — Tatuapé</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$312k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">87</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:87%"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-04 — Pinheiros</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$298k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--orange);font-family:Syne,sans-serif;font-weight:800">76</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:76%;background:var(--orange)"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-05 — Mooca</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$276k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">85</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:85%"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-06 — Santana</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$334k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">89</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:89%"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-07 — Ipiranga</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$261k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--orange);font-family:Syne,sans-serif;font-weight:800">74</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:74%;background:var(--orange)"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-08 — Jabaquara</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$248k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">82</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:82%"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-09 — Santo André</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$220k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--red);font-family:Syne,sans-serif;font-weight:800">68</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:68%;background:var(--red)"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-10 — Osasco</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$192k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--orange);font-family:Syne,sans-serif;font-weight:800">77</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:77%;background:var(--orange)"></div></div></div>
+        <div class="filial-card"><div class="filial-top"><div class="filial-name">SP-11 — Guarulhos</div><div class="filial-bandeira fb-blue">Mercadão</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$178k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--g2);font-family:Syne,sans-serif;font-weight:800">80</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:80%"></div></div></div>
+        <div class="filial-card catatau"><div class="filial-top"><div class="filial-name">CT-01 — Campinas</div><div class="filial-bandeira fb-cat">🐊 Catatau Farma</div></div><div class="filial-stats"><div class="fs-item"><div class="fs-val">R$205k</div><div class="fs-lbl">Faturamento</div></div><div class="fs-item"><div class="fs-val" style="color:var(--cat-purple);font-family:Syne,sans-serif;font-weight:800">78</div><div class="fs-lbl">Score</div></div></div><div class="filial-bar"><div class="filial-fill" style="width:78%"></div></div></div>
+      </div>
+    </div>
+
+    <!-- PAGE: RANKING GERAL -->
+    <div class="page" id="page-dir-ranking">
+      <div class="sec-hdr"><div class="sec-title">Ranking Geral — Todas as Filiais</div></div>
+      <div class="filter-bar">
+        <select class="filter-select"><option>Todas as Filiais</option><option>SP-01 — Centro</option><option>SP-03 — Tatuapé</option><option>CT-01 — Catatau</option></select>
+        <select class="filter-select"><option>Todos os Cargos</option><option>Farmacêutico</option><option>Atendente</option><option>Gerente</option></select>
+        <input class="search-box" type="text" placeholder="🔍 Buscar colaborador..."/>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Rank</th><th>Colaborador</th><th>Filial</th><th>Cargo</th><th>Vendas</th><th>NPS</th><th>Score</th></tr></thead>
+          <tbody id="ranking-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE: GESTÃO COLABORADORES (admin) -->
+    <div class="page" id="page-admin-users">
+      <div class="sec-hdr"><div class="sec-title">Gestão de Colaboradores</div><button class="btn-primary" style="padding:8px 16px;border-radius:8px;border:none;background:var(--g2);color:#fff;font-size:13px;cursor:pointer">+ Novo Colaborador</button></div>
+      <div class="filter-bar">
+        <select class="filter-select"><option>Todas as Filiais</option><option>SP-01 — Centro</option><option>SP-03 — Tatuapé</option><option>CT-01 — Catatau</option></select>
+        <select class="filter-select"><option>Todos os Perfis</option><option>Admin</option><option>Diretoria</option><option>Gerente</option><option>Colaborador</option></select>
+        <input class="search-box" type="text" placeholder="🔍 Buscar colaborador..."/>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nome</th><th>Login</th><th>Filial</th><th>Cargo</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Admin Sistema</strong></td><td>admin</td><td>—</td><td>Administrador</td><td><span class="td-badge" style="background:#fdf6dc;color:#8a6000">ADMIN</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
+            <tr><td><strong>Dir. Regional</strong></td><td>diretoria</td><td>Todas</td><td>Diretor</td><td><span class="td-badge" style="background:#f0eafd;color:#6230b0">DIRETOR</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
+            <tr><td><strong>Ger. Tatuapé</strong></td><td>gerente</td><td>SP-03</td><td>Gerente</td><td><span class="td-badge" style="background:#e8f1fb;color:#2a5db0">GERENTE</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
+            <tr><td><strong>João Silva</strong></td><td>joao</td><td>SP-03</td><td>Farmacêutico</td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
+            <tr><td>Maria Costa</td><td>maria.costa</td><td>SP-03</td><td>Farmacêutica</td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
+            <tr><td>Pedro Torres</td><td>pedro.torres</td><td>SP-03</td><td>Atendente</td><td><span class="td-badge" style="background:#e6f7ee;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#e6f7ee;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
+            <tr><td>Fernanda Rocha</td><td>fernanda.r</td><td>SP-07</td><td>Atendente</td><td><span class="td-badge" style="background:#e6f7ee;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#fff0e0;color:#c0631a">Inativo</span></td><td>✏️ 🗑️</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE: CONFIGURAÇÕES -->
+    <div class="page" id="page-settings">
+      <div class="sec-hdr"><div class="sec-title">Configurações do Sistema</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div class="chart-card">
+          <div class="chart-title">Período de Avaliação</div>
+          <div class="chart-sub">Defina como os KPIs são calculados</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+            <div class="field-group"><label>Mês de Referência</label><select class="filter-select" style="width:100%"><option>Abril 2025</option><option>Março 2025</option></select></div>
+            <div class="field-group"><label>Peso Vendas na Nota</label><select class="filter-select" style="width:100%"><option>40%</option><option>50%</option><option>30%</option></select></div>
+            <div class="field-group"><label>Peso NPS na Nota</label><select class="filter-select" style="width:100%"><option>30%</option><option>20%</option><option>40%</option></select></div>
+            <button class="btn-primary" style="margin-top:4px" onclick="showToast('✅ Configurações salvas!')">Salvar Configurações</button>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Bandeiras Cadastradas</div>
+          <div class="chart-sub">Redes ativas no sistema</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--s2);border-radius:10px">
+              <div><div style="font-weight:600;font-size:13px">Mercadão dos Medicamentos</div><div style="font-size:11px;color:var(--light)">11 filiais ativas</div></div>
+              <span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativa</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:linear-gradient(90deg,var(--cat-light-o),var(--cat-light-p));border-radius:10px;border:1px solid #e8d0f8">
+              <div><div style="font-weight:600;font-size:13px">🐊 Catatau Farma</div><div style="font-size:11px;color:var(--cat-purple)">1 filial ativa · Campinas</div></div>
+              <span class="td-badge" style="background:linear-gradient(90deg,var(--cat-orange),var(--cat-purple));color:#fff">Ativa</span>
+            </div>
+            <button class="btn-outline" onclick="showToast('Em breve: adicionar bandeiras!')">+ Adicionar Bandeira</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /screen-app -->
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ══ SUPABASE ══
+const SUPA_URL = 'https://irnqlnchtjtnwpnygbqq.supabase.co';
+const SUPA_KEY = 'sb_publishable_9d0HDzCuU8sERLIHcxA1Uw_Nd62W8Br';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// Configuração visual por perfil
+const PERFIL_CONFIG = {
+  admin:       {badge:'ADMIN',       badgeClass:'badge-admin', avBg:'#fdf6dc', avColor:'#8a6000'},
+  diretoria:   {badge:'DIRETOR',     badgeClass:'badge-dir',   avBg:'#f0eafd', avColor:'#6230b0'},
+  gerente:     {badge:'GERENTE',     badgeClass:'badge-ger',   avBg:'#e8f1fb', avColor:'#2a5db0'},
+  colaborador: {badge:'COLABORADOR', badgeClass:'badge-col',   avBg:'#e0eaff', avColor:'#0a1f5c'},
+};
+
+// ══ NAVS ══
+const NAVS = {
+  col:[
+    {icon:'📊', label:'Meu Desempenho', page:'col-dash', section:'Principal'},
+    {icon:'📅', label:'Histórico', page:'col-hist'},
+    {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
+  ],
+  ger:[
+    {icon:'🏪', label:'Minha Filial', page:'ger-dash', section:'Filial SP-03'},
+    {icon:'🏆', label:'Ranking Filial', page:'dir-ranking'},
+    {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
+  ],
+  dir:[
+    {icon:'🏢', label:'Visão Geral', page:'dir-dash', section:'Rede'},
+    {icon:'🏆', label:'Ranking Geral', page:'dir-ranking'},
+    {icon:'📊', label:'Relatórios', page:'col-hist'},
+    {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
+  ],
+  admin:[
+    {icon:'🏢', label:'Visão Geral', page:'dir-dash', section:'Rede'},
+    {icon:'🏆', label:'Ranking Geral', page:'dir-ranking'},
+    {icon:'👥', label:'Colaboradores', page:'admin-users', section:'Gestão'},
+    {icon:'⚙️', label:'Configurações', page:'settings'},
+    {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
+  ],
+};
+
+const PAGE_TITLES = {
+  'col-dash':'Meu Desempenho','col-hist':'Histórico','col-perfil':'Meu Perfil',
+  'ger-dash':'Filial SP-03','dir-dash':'Visão Geral da Rede',
+  'dir-ranking':'Ranking Geral','admin-users':'Colaboradores','settings':'Configurações',
+};
+
+let currentUser=null; let currentPage='';
+let dadosFiliais=[], dadosColaboradores=[], dadosKpis=[];
+
+async function doLogin(){
+  const u=document.getElementById('inp-user').value.trim().toLowerCase();
+  const p=document.getElementById('inp-pass').value.trim();
+  const errEl=document.getElementById('login-error');
+  const btn=document.querySelector('.btn-login');
+
+  if(!u||!p){errEl.style.display='block';errEl.textContent='❌ Preencha usuário e senha.';return;}
+
+  btn.textContent='Entrando...';btn.disabled=true;
+
+  try{
+    // Buscar colaborador no banco
+    const {data,error}=await supa
+      .from('colaboradores')
+      .select('*, filiais(codigo,nome,bandeira_id, bandeiras(nome,cor_primaria))')
+      .eq('login',u)
+      .eq('ativo',true)
+      .single();
+
+    if(error||!data){
+      errEl.style.display='block';
+      errEl.textContent='❌ Usuário não encontrado.';
+      btn.textContent='Entrar';btn.disabled=false;
+      return;
+    }
+
+    // Verificar senha (simples por enquanto — fase 2 usa bcrypt)
+    if(data.senha_hash!==p){
+      errEl.style.display='block';
+      errEl.textContent='❌ Senha incorreta.';
+      btn.textContent='Entrar';btn.disabled=false;
+      return;
+    }
+
+    errEl.style.display='none';
+
+    const perfil=data.perfil;
+    const cfg=PERFIL_CONFIG[perfil]||PERFIL_CONFIG.colaborador;
+    const iniciais=(data.nome||'?').split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase();
+    const filialNome=data.filiais?`${data.filiais.codigo} — ${data.filiais.nome}`:'Todas as Filiais';
+
+    currentUser={
+      id: data.id,
+      name: data.nome,
+      login: u,
+      cargo: data.cargo||'',
+      perfil,
+      filial_id: data.filial_id,
+      filialNome,
+      role: `${data.cargo||''} · ${filialNome}`,
+      badge: cfg.badge,
+      badgeClass: cfg.badgeClass,
+      av: iniciais,
+      avBg: cfg.avBg,
+      avColor: cfg.avColor,
+    };
+
+    // Carregar dados do banco em paralelo
+    await carregarDados();
+
+    document.getElementById('screen-login').classList.remove('active');
+    document.getElementById('screen-app').classList.add('active');
+    buildSidebar();
+    const firstPage=NAVS[perfil]?.[0]?.page || 'col-dash';
+    navigateTo(firstPage);
+
+  }catch(e){
+    errEl.style.display='block';
+    errEl.textContent='❌ Erro de conexão. Tente novamente.';
+    console.error(e);
+  }
+  btn.textContent='Entrar';btn.disabled=false;
+}
+
+async function carregarDados(){
+  try{
+    const [f,c,k]=await Promise.all([
+      supa.from('filiais').select('*, bandeiras(nome,cor_primaria,cor_secundaria)').order('codigo'),
+      supa.from('colaboradores').select('*, filiais(codigo,nome)').eq('ativo',true).order('nome'),
+      supa.from('kpis').select('*, colaboradores(nome,cargo,filial_id)').order('score',{ascending:false}),
+    ]);
+    dadosFiliais   = f.data||[];
+    dadosColaboradores = c.data||[];
+    dadosKpis      = k.data||[];
+
+    // Atualizar cards dinâmicos se estiver na tela de diretoria
+    renderizarFiliais();
+    renderizarRankingGeral();
+    renderizarKpisColaborador();
+  }catch(e){console.error('Erro ao carregar dados:',e);}
+}
+
+function renderizarFiliais(){
+  const grid=document.getElementById('filiais-dinamico');
+  if(!grid||!dadosFiliais.length)return;
+  grid.innerHTML='';
+  dadosFiliais.forEach(f=>{
+    const isCat=f.bandeira_id===2;
+    const kpisFilial=dadosKpis.filter(k=>k.colaboradores?.filial_id===f.id);
+    const scoreMedio=kpisFilial.length?Math.round(kpisFilial.reduce((a,k)=>a+Number(k.score),0)/kpisFilial.length):0;
+    const fat=kpisFilial.reduce((a,k)=>a+Number(k.vendas_valor||0),0);
+    const fatStr=fat>=1000?`R$${(fat/1000).toFixed(0)}k`:`R$${fat}`;
+    const scoreColor=scoreMedio>=90?'var(--g2)':scoreMedio>=75?'var(--g2)':scoreMedio>=60?'var(--orange)':'var(--red)';
+    grid.innerHTML+=`
+      <div class="filial-card ${isCat?'catatau':''}">
+        <div class="filial-top">
+          <div class="filial-name">${f.codigo} — ${f.nome}</div>
+          <div class="filial-bandeira ${isCat?'fb-cat':'fb-blue'}">${isCat?'🐊 Catatau Farma':'Mercadão'}</div>
+        </div>
+        <div class="filial-stats">
+          <div class="fs-item"><div class="fs-val">${fatStr}</div><div class="fs-lbl">Faturamento</div></div>
+          <div class="fs-item"><div class="fs-val" style="color:${scoreColor};font-family:Syne,sans-serif;font-weight:800">${scoreMedio||'—'}</div><div class="fs-lbl">Score</div></div>
+        </div>
+        <div class="filial-bar"><div class="filial-fill" style="width:${scoreMedio}%"></div></div>
+      </div>`;
+  });
+}
+
+function renderizarRankingGeral(){
+  const tbody=document.getElementById('ranking-tbody');
+  if(!tbody||!dadosKpis.length)return;
+  const medals=['🥇','🥈','🥉'];
+  tbody.innerHTML='';
+  dadosKpis.slice(0,15).forEach((k,i)=>{
+    const filial=dadosFiliais.find(f=>f.id===k.colaboradores?.filial_id);
+    const isCat=filial?.bandeira_id===2;
+    const filialTag=filial?`<span style="background:${isCat?'var(--cat-light-p)':'var(--s2)'};color:${isCat?'var(--cat-purple)':'var(--mid)'};font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px">${filial.codigo}${isCat?' 🐊':''}</span>`:'—';
+    const scoreClass=k.score>=90?'score-high':k.score>=75?'score-high':'score-mid';
+    tbody.innerHTML+=`<tr>
+      <td>${medals[i]||i+1}</td>
+      <td><strong>${k.colaboradores?.nome||'—'}</strong></td>
+      <td>${filialTag}</td>
+      <td>${k.colaboradores?.cargo||'—'}</td>
+      <td>R$${Number(k.vendas_valor||0).toLocaleString('pt-BR')}</td>
+      <td>${k.nps||0}%</td>
+      <td class="td-score ${scoreClass}">${k.score||0}</td>
+    </tr>`;
+  });
+}
+
+function renderizarKpisColaborador(){
+  if(!currentUser||currentUser.perfil!=='colaborador')return;
+  const kpi=dadosKpis.find(k=>k.colaboradores&&dadosColaboradores.find(c=>c.id===k.colaborador_id&&c.login===currentUser.login));
+  if(!kpi)return;
+  // Atualizar score no banner
+  const scoreEl=document.querySelector('.score-val');
+  if(scoreEl)scoreEl.textContent=kpi.score||'—';
+}
+
+function doLogout(){
+  currentUser=null;
+  document.getElementById('screen-app').classList.remove('active');
+  document.getElementById('screen-login').classList.add('active');
+  document.getElementById('inp-user').value='';
+  document.getElementById('inp-pass').value='';
+}
+
+function buildSidebar(){
+  // user info
+  document.getElementById('sb-avatar').textContent=currentUser.av;
+  document.getElementById('sb-avatar').style.background=currentUser.avBg;
+  document.getElementById('sb-avatar').style.color=currentUser.avColor;
+  document.getElementById('sb-name').textContent=currentUser.name;
+  document.getElementById('sb-role').textContent=currentUser.role;
+  const badge=document.getElementById('sb-badge');
+  badge.textContent=currentUser.badge;
+  badge.className='sb-badge '+currentUser.badgeClass;
+  // nav
+  const nav=document.getElementById('sb-nav');
+  nav.innerHTML='';
+  NAVS[currentUser.perfil].forEach(item=>{
+    if(item.section){const s=document.createElement('div');s.className='sb-section';s.textContent=item.section;nav.appendChild(s);}
+    const a=document.createElement('a');
+    a.className='sb-item'; a.href='#';
+    a.dataset.page=item.page;
+    a.innerHTML=`<span class="si">${item.icon}</span>${item.label}`;
+    a.addEventListener('click',e=>{e.preventDefault();navigateTo(item.page);closeSidebar();});
+    nav.appendChild(a);
+  });
+}
+
+function navigateTo(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const pg=document.getElementById('page-'+pageId);
+  if(pg) pg.classList.add('active');
+  const active=document.querySelector(`.sb-item[data-page="${pageId}"]`);
+  if(active) active.classList.add('active');
+  document.getElementById('tb-title').innerHTML=PAGE_TITLES[pageId]||'Painel';
+  currentPage=pageId;
+  window.scrollTo(0,0);
+}
+
+// Period selector
+function setPeriod(btn){
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Mobile sidebar
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sb-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+
+// Toast
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',2800);
+}
+
+// Enter key on login
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('screen-login').classList.contains('active'))doLogin();});
+</script>
+</body>
+</html>
