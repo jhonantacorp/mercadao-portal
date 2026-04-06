@@ -529,19 +529,17 @@ tr:hover td{background:var(--s2);}
       <div class="perfil-grid">
         <div>
           <div class="perfil-card">
-            <div class="perfil-avatar-lg" style="background:#e6f7ee;color:var(--g0)">JS</div>
-            <div class="perfil-name">João Silva</div>
-            <div class="perfil-role">Farmacêutico · Filial SP-03</div>
+            <div class="perfil-avatar-lg" id="perfil-av" style="background:#e0eaff;color:var(--g0)">?</div>
+            <div class="perfil-name" id="perfil-nome">—</div>
+            <div class="perfil-role" id="perfil-cargo">—</div>
             <div class="perfil-info">
-              <div class="pi-row"><span class="pi-lbl">Matrícula</span><span class="pi-val">MRC-00342</span></div>
-              <div class="pi-row"><span class="pi-lbl">Filial</span><span class="pi-val">SP-03 — Tatuapé</span></div>
-              <div class="pi-row"><span class="pi-lbl">Cargo</span><span class="pi-val">Farmacêutico</span></div>
-              <div class="pi-row"><span class="pi-lbl">Admissão</span><span class="pi-val">12/03/2021</span></div>
-              <div class="pi-row"><span class="pi-lbl">Score Atual</span><span class="pi-val" style="color:var(--g2);font-weight:700">92 ⭐</span></div>
-              <div class="pi-row"><span class="pi-lbl">Ranking</span><span class="pi-val">3º na filial</span></div>
+              <div class="pi-row"><span class="pi-lbl">Login</span><span class="pi-val" id="perfil-login">—</span></div>
+              <div class="pi-row"><span class="pi-lbl">Filial</span><span class="pi-val" id="perfil-filial">—</span></div>
+              <div class="pi-row"><span class="pi-lbl">Cargo</span><span class="pi-val" id="perfil-funcao">—</span></div>
+              <div class="pi-row"><span class="pi-lbl">Perfil</span><span class="pi-val" id="perfil-perfil">—</span></div>
+              <div class="pi-row"><span class="pi-lbl">Score Atual</span><span class="pi-val" id="perfil-score" style="color:var(--g2);font-weight:700">— ⭐</span></div>
             </div>
             <div class="perfil-actions">
-              <button class="btn-outline">✏️ Editar dados</button>
               <button class="btn-outline" onclick="abrirModalSenha()">🔑 Alterar senha</button>
               <button class="btn-primary" onclick="doLogout()">🚪 Sair</button>
             </div>
@@ -653,24 +651,24 @@ tr:hover td{background:var(--s2);}
 
     <!-- PAGE: GESTÃO COLABORADORES (admin) -->
     <div class="page" id="page-admin-users">
-      <div class="sec-hdr"><div class="sec-title">Gestão de Colaboradores</div><button class="btn-primary" style="padding:8px 16px;border-radius:8px;border:none;background:var(--g2);color:#fff;font-size:13px;cursor:pointer">+ Novo Colaborador</button></div>
+      <div class="sec-hdr">
+        <div class="sec-title">Gestão de Colaboradores</div>
+        <button class="btn-primary" style="padding:8px 16px;border-radius:8px;border:none;background:var(--g2);color:#fff;font-size:13px;cursor:pointer" onclick="abrirModalColaborador()">+ Novo Colaborador</button>
+      </div>
       <div class="filter-bar">
-        <select class="filter-select"><option>Todas as Filiais</option><option>SP-01 — Centro</option><option>SP-03 — Tatuapé</option><option>CT-01 — Catatau</option></select>
-        <select class="filter-select"><option>Todos os Perfis</option><option>Admin</option><option>Diretoria</option><option>Gerente</option><option>Colaborador</option></select>
-        <input class="search-box" type="text" placeholder="🔍 Buscar colaborador..."/>
+        <input class="search-box" type="text" id="busca-colab" placeholder="🔍 Buscar por nome ou login..." oninput="filtrarColaboradores()"/>
+        <select class="filter-select" id="filtro-perfil" onchange="filtrarColaboradores()">
+          <option value="">Todos os Perfis</option>
+          <option value="admin">Admin</option>
+          <option value="diretoria">Diretoria</option>
+          <option value="gerente">Gerente</option>
+          <option value="colaborador">Colaborador</option>
+        </select>
       </div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Nome</th><th>Login</th><th>Filial</th><th>Cargo</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Admin Sistema</strong></td><td>admin</td><td>—</td><td>Administrador</td><td><span class="td-badge" style="background:#fdf6dc;color:#8a6000">ADMIN</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
-            <tr><td><strong>Dir. Regional</strong></td><td>diretoria</td><td>Todas</td><td>Diretor</td><td><span class="td-badge" style="background:#f0eafd;color:#6230b0">DIRETOR</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
-            <tr><td><strong>Ger. Tatuapé</strong></td><td>gerente</td><td>SP-03</td><td>Gerente</td><td><span class="td-badge" style="background:#e8f1fb;color:#2a5db0">GERENTE</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
-            <tr><td><strong>João Silva</strong></td><td>joao</td><td>SP-03</td><td>Farmacêutico</td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
-            <tr><td>Maria Costa</td><td>maria.costa</td><td>SP-03</td><td>Farmacêutica</td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#e0eaff;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
-            <tr><td>Pedro Torres</td><td>pedro.torres</td><td>SP-03</td><td>Atendente</td><td><span class="td-badge" style="background:#e6f7ee;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#e6f7ee;color:var(--g2)">Ativo</span></td><td>✏️ 🗑️</td></tr>
-            <tr><td>Fernanda Rocha</td><td>fernanda.r</td><td>SP-07</td><td>Atendente</td><td><span class="td-badge" style="background:#e6f7ee;color:var(--g2)">COLAB.</span></td><td><span class="td-badge" style="background:#fff0e0;color:#c0631a">Inativo</span></td><td>✏️ 🗑️</td></tr>
-          </tbody>
+          <tbody id="admin-users-tbody"><tr><td colspan="7" style="text-align:center;color:var(--light);padding:24px">Carregando...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -710,7 +708,44 @@ tr:hover td{background:var(--s2);}
   </div><!-- /main -->
 </div><!-- /screen-app -->
 
-<!-- MODAL ALTERAR SENHA -->
+<!-- MODAL COLABORADOR (novo/editar) -->
+<div id="modal-colab" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;overflow-y:auto;">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:460px;margin:20px auto;box-shadow:0 24px 64px rgba(0,0,0,.2);">
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;" id="modal-colab-titulo">👤 Novo Colaborador</div>
+    <input type="hidden" id="colab-id"/>
+    <div class="field-group"><label>NOME COMPLETO</label><input type="text" id="colab-nome" placeholder="Nome completo"/></div>
+    <div class="field-group"><label>LOGIN (ID A7)</label><input type="text" id="colab-login" placeholder="Ex: 730"/></div>
+    <div class="field-group"><label>SENHA</label><input type="password" id="colab-senha" placeholder="Deixe em branco para não alterar"/></div>
+    <div class="field-group"><label>CARGO</label><input type="text" id="colab-cargo" placeholder="Ex: Farmacêutico, Balconista..."/></div>
+    <div class="field-group">
+      <label>PERFIL</label>
+      <select id="colab-perfil" class="filter-select" style="width:100%">
+        <option value="colaborador">Colaborador</option>
+        <option value="gerente">Gerente</option>
+        <option value="diretoria">Diretoria</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>FILIAL</label>
+      <select id="colab-filial" class="filter-select" style="width:100%">
+        <option value="">— Sem filial (Admin/Diretoria) —</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>STATUS</label>
+      <select id="colab-ativo" class="filter-select" style="width:100%">
+        <option value="true">Ativo</option>
+        <option value="false">Inativo</option>
+      </select>
+    </div>
+    <div id="colab-erro" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none;"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn-outline" style="flex:1" onclick="fecharModalColab()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="salvarColaborador()">Salvar</button>
+    </div>
+  </div>
+</div>
 <div id="modal-senha" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:400px;margin:20px;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:fadeUp .3s ease;">
     <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">🔑 Alterar Senha</div>
@@ -997,6 +1032,9 @@ function navigateTo(pageId){
   document.getElementById('tb-title').innerHTML=PAGE_TITLES[pageId]||'Painel';
   currentPage=pageId;
   window.scrollTo(0,0);
+  // Renderizar dados dinâmicos por página
+  if(pageId==='col-perfil') renderizarPerfil();
+  if(pageId==='admin-users') carregarTabelaColaboradores();
 }
 
 // Period selector
@@ -1020,6 +1058,155 @@ function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.style.display='block';
   setTimeout(()=>t.style.display='none',2800);
+}
+
+// ══ PERFIL DINÂMICO ══
+function renderizarPerfil(){
+  if(!currentUser) return;
+  const av = document.getElementById('perfil-av');
+  const kpi = dadosKpis.find(k=>k.colaborador_id===currentUser.id);
+  if(av){ av.textContent=currentUser.av; av.style.background=currentUser.avBg; av.style.color=currentUser.avColor; }
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val||'—';};
+  set('perfil-nome', currentUser.name);
+  set('perfil-cargo', `${currentUser.cargo} · ${currentUser.filialNome}`);
+  set('perfil-login', currentUser.login);
+  set('perfil-filial', currentUser.filialNome);
+  set('perfil-funcao', currentUser.cargo);
+  set('perfil-perfil', currentUser.badge);
+  set('perfil-score', kpi ? `${kpi.score} ⭐` : '— ⭐');
+}
+
+// ══ GESTÃO COLABORADORES ══
+let todosColaboradores = [];
+
+async function carregarTabelaColaboradores(){
+  const tbody = document.getElementById('admin-users-tbody');
+  if(!tbody) return;
+  tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--light);padding:24px">Carregando...</td></tr>';
+  const {data, error} = await supa.from('colaboradores').select('*, filiais(codigo,nome)').order('nome');
+  if(error || !data){ tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--red)">Erro ao carregar dados.</td></tr>'; return; }
+  todosColaboradores = data;
+  renderizarTabelaColaboradores(data);
+  // Popular select de filiais no modal
+  const sel = document.getElementById('colab-filial');
+  if(sel && dadosFiliais.length){
+    dadosFiliais.forEach(f=>{
+      if(!sel.querySelector(`option[value="${f.id}"]`)){
+        const op=document.createElement('option'); op.value=f.id; op.textContent=`${f.codigo} — ${f.nome}`; sel.appendChild(op);
+      }
+    });
+  }
+}
+
+function renderizarTabelaColaboradores(lista){
+  const tbody = document.getElementById('admin-users-tbody');
+  if(!tbody) return;
+  if(!lista.length){ tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--light);padding:24px">Nenhum resultado.</td></tr>'; return; }
+  const BADGE_PERFIL = {
+    admin:       'background:#fdf6dc;color:#8a6000',
+    diretoria:   'background:#f0eafd;color:#6230b0',
+    gerente:     'background:#e8f1fb;color:#2a5db0',
+    colaborador: 'background:#e0eaff;color:var(--g2)',
+  };
+  tbody.innerHTML = lista.map(c=>`
+    <tr>
+      <td><strong>${c.nome}</strong></td>
+      <td style="font-family:monospace;font-size:12px">${c.login}</td>
+      <td>${c.filiais ? c.filiais.codigo : '—'}</td>
+      <td>${c.cargo||'—'}</td>
+      <td><span class="td-badge" style="${BADGE_PERFIL[c.perfil]||''}">${(c.perfil||'').toUpperCase()}</span></td>
+      <td><span class="td-badge" style="${c.ativo?'background:#e0eaff;color:var(--g2)':'background:#fff0e0;color:#c0631a'}">${c.ativo?'Ativo':'Inativo'}</span></td>
+      <td style="white-space:nowrap">
+        <button onclick="editarColaborador(${c.id})" style="background:none;border:none;cursor:pointer;font-size:16px;margin-right:4px" title="Editar">✏️</button>
+        <button onclick="toggleAtivo(${c.id},${c.ativo})" style="background:none;border:none;cursor:pointer;font-size:16px" title="${c.ativo?'Desativar':'Ativar'}">${c.ativo?'🔴':'🟢'}</button>
+      </td>
+    </tr>`).join('');
+}
+
+function filtrarColaboradores(){
+  const busca = (document.getElementById('busca-colab')?.value||'').toLowerCase();
+  const perfil = document.getElementById('filtro-perfil')?.value||'';
+  const filtrado = todosColaboradores.filter(c=>{
+    const matchBusca = !busca || c.nome.toLowerCase().includes(busca) || c.login.toLowerCase().includes(busca);
+    const matchPerfil = !perfil || c.perfil===perfil;
+    return matchBusca && matchPerfil;
+  });
+  renderizarTabelaColaboradores(filtrado);
+}
+
+function abrirModalColaborador(id=null){
+  document.getElementById('modal-colab-titulo').textContent = id ? '✏️ Editar Colaborador' : '👤 Novo Colaborador';
+  document.getElementById('colab-id').value='';
+  document.getElementById('colab-nome').value='';
+  document.getElementById('colab-login').value='';
+  document.getElementById('colab-senha').value='';
+  document.getElementById('colab-cargo').value='';
+  document.getElementById('colab-perfil').value='colaborador';
+  document.getElementById('colab-filial').value='';
+  document.getElementById('colab-ativo').value='true';
+  document.getElementById('colab-erro').style.display='none';
+  document.getElementById('modal-colab').style.display='flex';
+}
+
+function editarColaborador(id){
+  const c = todosColaboradores.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('modal-colab-titulo').textContent='✏️ Editar Colaborador';
+  document.getElementById('colab-id').value=c.id;
+  document.getElementById('colab-nome').value=c.nome||'';
+  document.getElementById('colab-login').value=c.login||'';
+  document.getElementById('colab-senha').value='';
+  document.getElementById('colab-cargo').value=c.cargo||'';
+  document.getElementById('colab-perfil').value=c.perfil||'colaborador';
+  document.getElementById('colab-filial').value=c.filial_id||'';
+  document.getElementById('colab-ativo').value=String(c.ativo);
+  document.getElementById('colab-erro').style.display='none';
+  document.getElementById('modal-colab').style.display='flex';
+}
+
+function fecharModalColab(){
+  document.getElementById('modal-colab').style.display='none';
+}
+
+async function salvarColaborador(){
+  const id    = document.getElementById('colab-id').value;
+  const nome  = document.getElementById('colab-nome').value.trim();
+  const login = document.getElementById('colab-login').value.trim();
+  const senha = document.getElementById('colab-senha').value;
+  const cargo = document.getElementById('colab-cargo').value.trim();
+  const perfil= document.getElementById('colab-perfil').value;
+  const filialId = document.getElementById('colab-filial').value || null;
+  const ativo = document.getElementById('colab-ativo').value === 'true';
+  const erroEl= document.getElementById('colab-erro');
+
+  if(!nome||!login){ erroEl.textContent='❌ Nome e login são obrigatórios.'; erroEl.style.display='block'; return; }
+
+  const payload = { nome, login, cargo, perfil, filial_id: filialId||null, ativo };
+  if(senha) payload.senha_hash = senha;
+
+  let error;
+  if(id){
+    const res = await supa.from('colaboradores').update(payload).eq('id', id);
+    error = res.error;
+  } else {
+    if(!senha){ erroEl.textContent='❌ Senha obrigatória para novo colaborador.'; erroEl.style.display='block'; return; }
+    const res = await supa.from('colaboradores').insert({...payload, senha_hash: senha});
+    error = res.error;
+  }
+
+  if(error){ erroEl.textContent='❌ Erro: '+error.message; erroEl.style.display='block'; return; }
+
+  fecharModalColab();
+  showToast(id ? '✅ Colaborador atualizado!' : '✅ Colaborador criado!');
+  carregarTabelaColaboradores();
+}
+
+async function toggleAtivo(id, ativoAtual){
+  const novoStatus = !ativoAtual;
+  const {error} = await supa.from('colaboradores').update({ativo: novoStatus}).eq('id', id);
+  if(error){ showToast('❌ Erro ao alterar status.'); return; }
+  showToast(novoStatus ? '✅ Colaborador ativado!' : '⚠️ Colaborador desativado!');
+  carregarTabelaColaboradores();
 }
 
 // ══ ALTERAR SENHA ══
