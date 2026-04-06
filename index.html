@@ -673,6 +673,84 @@ tr:hover td{background:var(--s2);}
       </div>
     </div>
 
+    <!-- PAGE: METAS FILIAIS (Diretoria/Admin) -->
+    <div class="page" id="page-dir-metas">
+      <div class="banner">
+        <div class="banner-text">
+          <h2>🎯 Metas das Filiais</h2>
+          <p>Defina a meta de vendas mensal para cada filial</p>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <select class="filter-select" id="dir-metas-mes" onchange="carregarMetasFiliais()">
+          <option value="3">Março</option><option value="4" selected>Abril</option>
+          <option value="5">Maio</option><option value="6">Junho</option>
+          <option value="7">Julho</option><option value="8">Agosto</option>
+          <option value="9">Setembro</option><option value="10">Outubro</option>
+          <option value="11">Novembro</option><option value="12">Dezembro</option>
+        </select>
+        <select class="filter-select" id="dir-metas-ano">
+          <option value="2025">2025</option><option value="2026" selected>2026</option>
+        </select>
+        <button class="btn-primary" style="padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px" onclick="carregarMetasFiliais()">🔄 Atualizar</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Filial</th><th>Bandeira</th><th>Meta Atual (R$)</th><th>Nova Meta (R$)</th><th>Ação</th></tr></thead>
+          <tbody id="dir-metas-tbody"><tr><td colspan="5" style="text-align:center;color:var(--light);padding:24px">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE: DISTRIBUIR METAS (Gerente) -->
+    <div class="page" id="page-ger-metas">
+      <div class="banner">
+        <div class="banner-text">
+          <h2>🎯 Distribuir Metas do Time</h2>
+          <p>Distribua a meta da filial entre os colaboradores</p>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <select class="filter-select" id="ger-metas-filial" onchange="carregarMetasGerente()">
+          <option value="">Selecione a filial...</option>
+        </select>
+        <select class="filter-select" id="ger-metas-mes">
+          <option value="3">Março</option><option value="4" selected>Abril</option>
+          <option value="5">Maio</option><option value="6">Junho</option>
+          <option value="7">Julho</option><option value="8">Agosto</option>
+          <option value="9">Setembro</option><option value="10">Outubro</option>
+          <option value="11">Novembro</option><option value="12">Dezembro</option>
+        </select>
+        <select class="filter-select" id="ger-metas-ano">
+          <option value="2025">2025</option><option value="2026" selected>2026</option>
+        </select>
+        <button class="btn-primary" style="padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px" onclick="carregarMetasGerente()">🔄 Carregar</button>
+      </div>
+      <div id="ger-metas-resumo" style="display:none;margin-bottom:16px" class="chart-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+          <div><div style="font-size:12px;color:var(--light)">Meta Total da Filial</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--g0)" id="ger-meta-total">R$0</div></div>
+          <div><div style="font-size:12px;color:var(--light)">Distribuído</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--g2)" id="ger-meta-dist">R$0</div></div>
+          <div><div style="font-size:12px;color:var(--light)">Saldo</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;" id="ger-meta-saldo">R$0</div></div>
+          <button class="btn-primary" style="padding:10px 24px;border-radius:8px;border:none;cursor:pointer" onclick="salvarMetasGerente()">💾 Salvar Metas</button>
+        </div>
+        <div style="margin-top:12px;height:8px;background:var(--s2);border-radius:8px;overflow:hidden"><div id="ger-meta-barra" style="height:100%;border-radius:8px;background:var(--g3);transition:width .5s"></div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Colaborador</th><th>Cargo</th><th>Meta Atual (R$)</th><th>Nova Meta (R$)</th></tr></thead>
+          <tbody id="ger-metas-tbody"><tr><td colspan="4" style="text-align:center;color:var(--light);padding:24px">Selecione uma filial e clique em Carregar</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE: MINHAS METAS (Colaborador) -->
+    <div class="page" id="page-col-metas">
+      <div class="sec-hdr"><div class="sec-title">🎯 Minhas Metas</div></div>
+      <div id="col-metas-content" style="display:flex;flex-direction:column;gap:16px">
+        <div style="text-align:center;color:var(--light);padding:40px">Carregando suas metas...</div>
+      </div>
+    </div>
+
     <!-- PAGE: CONFIGURAÇÕES -->
     <div class="page" id="page-settings">
       <div class="sec-hdr"><div class="sec-title">Configurações do Sistema</div></div>
@@ -795,22 +873,26 @@ const PERFIL_CONFIG = {
 const NAVS = {
   colaborador:[
     {icon:'📊', label:'Meu Desempenho', page:'col-dash', section:'Principal'},
+    {icon:'🎯', label:'Minhas Metas', page:'col-metas'},
     {icon:'📅', label:'Histórico', page:'col-hist'},
     {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
   ],
   gerente:[
-    {icon:'🏪', label:'Minha Filial', page:'ger-dash', section:'Minha Filial'},
+    {icon:'🏪', label:'Minha Filial', page:'ger-dash', section:'Gestão'},
+    {icon:'🎯', label:'Distribuir Metas', page:'ger-metas'},
     {icon:'🏆', label:'Ranking Filial', page:'dir-ranking'},
     {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
   ],
   diretoria:[
     {icon:'🏢', label:'Visão Geral', page:'dir-dash', section:'Rede'},
+    {icon:'🎯', label:'Metas das Filiais', page:'dir-metas'},
     {icon:'🏆', label:'Ranking Geral', page:'dir-ranking'},
     {icon:'📊', label:'Relatórios', page:'col-hist'},
     {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
   ],
   admin:[
     {icon:'🏢', label:'Visão Geral', page:'dir-dash', section:'Rede'},
+    {icon:'🎯', label:'Metas das Filiais', page:'dir-metas'},
     {icon:'🏆', label:'Ranking Geral', page:'dir-ranking'},
     {icon:'👥', label:'Colaboradores', page:'admin-users', section:'Gestão'},
     {icon:'⚙️', label:'Configurações', page:'settings'},
@@ -818,17 +900,18 @@ const NAVS = {
   ],
 };
 
-// Páginas permitidas por perfil (segurança extra)
+// Páginas permitidas por perfil
 const PAGES_PERMITIDAS = {
-  colaborador: ['col-dash','col-hist','col-perfil'],
-  gerente:     ['ger-dash','dir-ranking','col-perfil'],
-  diretoria:   ['dir-dash','dir-ranking','col-hist','col-perfil'],
-  admin:       ['dir-dash','dir-ranking','admin-users','settings','col-hist','col-perfil'],
+  colaborador: ['col-dash','col-metas','col-hist','col-perfil'],
+  gerente:     ['ger-dash','ger-metas','dir-ranking','col-perfil'],
+  diretoria:   ['dir-dash','dir-metas','dir-ranking','col-hist','col-perfil'],
+  admin:       ['dir-dash','dir-metas','dir-ranking','admin-users','settings','col-hist','col-perfil'],
 };
 
 const PAGE_TITLES = {
-  'col-dash':'Meu Desempenho','col-hist':'Histórico','col-perfil':'Meu Perfil',
-  'ger-dash':'Filial SP-03','dir-dash':'Visão Geral da Rede',
+  'col-dash':'Meu Desempenho','col-metas':'Minhas Metas','col-hist':'Histórico','col-perfil':'Meu Perfil',
+  'ger-dash':'Minha Filial','ger-metas':'Distribuir Metas',
+  'dir-dash':'Visão Geral da Rede','dir-metas':'Metas das Filiais',
   'dir-ranking':'Ranking Geral','admin-users':'Colaboradores','settings':'Configurações',
 };
 
@@ -1035,6 +1118,9 @@ function navigateTo(pageId){
   // Renderizar dados dinâmicos por página
   if(pageId==='col-perfil') renderizarPerfil();
   if(pageId==='admin-users') carregarTabelaColaboradores();
+  if(pageId==='dir-metas') carregarMetasFiliais();
+  if(pageId==='ger-metas') iniciarPaginaGerente();
+  if(pageId==='col-metas') carregarMetasColaborador();
 }
 
 // Period selector
@@ -1209,7 +1295,197 @@ async function toggleAtivo(id, ativoAtual){
   carregarTabelaColaboradores();
 }
 
-// ══ ALTERAR SENHA ══
+// ══ METAS — DIRETORIA/ADMIN ══
+let metasFiliais = {};
+
+async function carregarMetasFiliais(){
+  const mes = parseInt(document.getElementById('dir-metas-mes')?.value||4);
+  const ano = parseInt(document.getElementById('dir-metas-ano')?.value||2026);
+  const tbody = document.getElementById('dir-metas-tbody');
+  if(!tbody) return;
+  tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--light);padding:24px">Carregando...</td></tr>';
+
+  const {data:metas} = await supa.from('metas_filial').select('*').eq('mes',mes).eq('ano',ano);
+  metasFiliais = {};
+  (metas||[]).forEach(m=>metasFiliais[m.filial_id]=m);
+
+  tbody.innerHTML = dadosFiliais.map(f=>{
+    const isCat = f.bandeira_id===2;
+    const metaAtual = metasFiliais[f.id]?.meta_vendas||0;
+    return `<tr>
+      <td><strong>${f.codigo} — ${f.nome}</strong></td>
+      <td><span class="td-badge" style="${isCat?'background:var(--cat-light-p);color:var(--cat-purple)':'background:#e0eaff;color:var(--g2)'}">${isCat?'🐊 Catatau':'Mercadão'}</span></td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700">R$ ${Number(metaAtual).toLocaleString('pt-BR',{minimumFractionDigits:2})}</td>
+      <td><input type="number" id="meta-filial-${f.id}" value="${metaAtual}" min="0" step="1000"
+        style="width:160px;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+        onfocus="this.style.borderColor='var(--g3)'" onblur="this.style.borderColor='var(--border)'"/></td>
+      <td><button onclick="salvarMetaFilial(${f.id},${mes},${ano})"
+        style="background:var(--g2);color:#fff;border:none;border-radius:8px;padding:7px 16px;cursor:pointer;font-size:12px;font-weight:600">
+        💾 Salvar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function salvarMetaFilial(filialId, mes, ano){
+  const val = parseFloat(document.getElementById(`meta-filial-${filialId}`)?.value||0);
+  const {error} = await supa.from('metas_filial').upsert(
+    {filial_id:filialId, mes, ano, meta_vendas:val, criado_por:currentUser.id},
+    {onConflict:'filial_id,mes,ano'}
+  );
+  if(error){ showToast('❌ Erro ao salvar meta.'); return; }
+  showToast('✅ Meta da filial salva!');
+  metasFiliais[filialId] = {meta_vendas:val};
+}
+
+// ══ METAS — GERENTE ══
+let colabsFilialGerente = [];
+let metaFilialGerente = 0;
+
+async function iniciarPaginaGerente(){
+  // Carregar filiais do gerente
+  const {data:gf} = await supa.from('gerente_filial')
+    .select('filial_id, filiais(id,codigo,nome)')
+    .eq('colaborador_id', currentUser.id);
+
+  const sel = document.getElementById('ger-metas-filial');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">Selecione a filial...</option>';
+  (gf||[]).forEach(g=>{
+    const op = document.createElement('option');
+    op.value = g.filial_id;
+    op.textContent = `${g.filiais.codigo} — ${g.filiais.nome}`;
+    sel.appendChild(op);
+  });
+  if(gf?.length===1){ sel.value=gf[0].filial_id; carregarMetasGerente(); }
+}
+
+async function carregarMetasGerente(){
+  const filialId = parseInt(document.getElementById('ger-metas-filial')?.value||0);
+  const mes = parseInt(document.getElementById('ger-metas-mes')?.value||4);
+  const ano = parseInt(document.getElementById('ger-metas-ano')?.value||2026);
+  const tbody = document.getElementById('ger-metas-tbody');
+  const resumo = document.getElementById('ger-metas-resumo');
+  if(!tbody||!filialId) return;
+
+  tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--light);padding:24px">Carregando...</td></tr>';
+
+  // Buscar meta da filial
+  const {data:mf} = await supa.from('metas_filial').select('meta_vendas').eq('filial_id',filialId).eq('mes',mes).eq('ano',ano).single();
+  metaFilialGerente = mf?.meta_vendas||0;
+
+  // Buscar colaboradores da filial
+  const {data:colab} = await supa.from('colaboradores').select('id,nome,cargo').eq('filial_id',filialId).eq('ativo',true).order('nome');
+  colabsFilialGerente = colab||[];
+
+  // Buscar metas já distribuídas
+  const ids = colabsFilialGerente.map(c=>c.id);
+  const {data:mc} = await supa.from('metas_colaborador').select('*').in('colaborador_id',ids).eq('filial_id',filialId).eq('mes',mes).eq('ano',ano);
+  const metasMap = {};
+  (mc||[]).forEach(m=>metasMap[m.colaborador_id]=m.meta_vendas);
+
+  if(resumo) resumo.style.display='block';
+  document.getElementById('ger-meta-total').textContent = `R$ ${Number(metaFilialGerente).toLocaleString('pt-BR',{minimumFractionDigits:2})}`;
+  atualizarBarraGerente(metasMap);
+
+  if(!colabsFilialGerente.length){
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--light);padding:24px">Nenhum colaborador ativo nesta filial.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = colabsFilialGerente.map(c=>`
+    <tr>
+      <td><strong>${c.nome}</strong></td>
+      <td>${c.cargo||'—'}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700">R$ ${Number(metasMap[c.id]||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</td>
+      <td><input type="number" id="meta-colab-${c.id}" value="${metasMap[c.id]||0}" min="0" step="500"
+        style="width:160px;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+        oninput="atualizarBarraGerente()" onfocus="this.style.borderColor='var(--g3)'" onblur="this.style.borderColor='var(--border)'"/></td>
+    </tr>`).join('');
+}
+
+function atualizarBarraGerente(metasMap=null){
+  let total = 0;
+  colabsFilialGerente.forEach(c=>{
+    const val = metasMap
+      ? parseFloat(metasMap[c.id]||0)
+      : parseFloat(document.getElementById(`meta-colab-${c.id}`)?.value||0);
+    total += val;
+  });
+  const pct = metaFilialGerente>0 ? Math.min(100,(total/metaFilialGerente)*100) : 0;
+  const saldo = metaFilialGerente - total;
+  const el = document.getElementById('ger-meta-dist');
+  const elS = document.getElementById('ger-meta-saldo');
+  const elB = document.getElementById('ger-meta-barra');
+  if(el) el.textContent=`R$ ${Number(total).toLocaleString('pt-BR',{minimumFractionDigits:2})}`;
+  if(elS){ elS.textContent=`R$ ${Number(Math.abs(saldo)).toLocaleString('pt-BR',{minimumFractionDigits:2})}`; elS.style.color=saldo<0?'var(--red)':'var(--g2)'; elS.previousElementSibling.textContent=saldo<0?'Excedente':'Saldo'; }
+  if(elB){ elB.style.width=`${pct}%`; elB.style.background=pct>100?'var(--red)':pct>=90?'var(--g3)':'var(--gold)'; }
+}
+
+async function salvarMetasGerente(){
+  const filialId = parseInt(document.getElementById('ger-metas-filial')?.value||0);
+  const mes = parseInt(document.getElementById('ger-metas-mes')?.value||4);
+  const ano = parseInt(document.getElementById('ger-metas-ano')?.value||2026);
+  if(!filialId){ showToast('❌ Selecione uma filial.'); return; }
+
+  const upserts = colabsFilialGerente.map(c=>({
+    colaborador_id: c.id,
+    filial_id: filialId,
+    mes, ano,
+    meta_vendas: parseFloat(document.getElementById(`meta-colab-${c.id}`)?.value||0),
+    criado_por: currentUser.id
+  }));
+
+  const {error} = await supa.from('metas_colaborador').upsert(upserts,{onConflict:'colaborador_id,filial_id,mes,ano'});
+  if(error){ showToast('❌ Erro ao salvar metas: '+error.message); return; }
+  showToast('✅ Metas salvas com sucesso!');
+  carregarMetasGerente();
+}
+
+// ══ METAS — COLABORADOR ══
+async function carregarMetasColaborador(){
+  const content = document.getElementById('col-metas-content');
+  if(!content) return;
+  content.innerHTML='<div style="text-align:center;color:var(--light);padding:40px">Carregando suas metas...</div>';
+
+  const {data:metas} = await supa.from('metas_colaborador')
+    .select('*, filiais(codigo,nome)')
+    .eq('colaborador_id', currentUser.id)
+    .order('ano',{ascending:false}).order('mes',{ascending:false});
+
+  if(!metas?.length){
+    content.innerHTML='<div class="chart-card" style="text-align:center;padding:40px;color:var(--light)">Nenhuma meta definida ainda.<br><small>Aguarde seu gerente distribuir as metas do mês.</small></div>';
+    return;
+  }
+
+  // Agrupar por mês/ano
+  const grupos = {};
+  metas.forEach(m=>{
+    const key=`${m.ano}-${String(m.mes).padStart(2,'0')}`;
+    if(!grupos[key]) grupos[key]={mes:m.mes,ano:m.ano,itens:[]};
+    grupos[key].itens.push(m);
+  });
+
+  const meses=['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  content.innerHTML = Object.values(grupos).map(g=>{
+    const totalMeta = g.itens.reduce((a,i)=>a+Number(i.meta_vendas||0),0);
+    return `
+    <div class="chart-card">
+      <div class="chart-title">${meses[g.mes]} ${g.ano}</div>
+      <div class="chart-sub">Meta total consolidada de todas as filiais</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px">
+        ${g.itens.map(i=>`
+          <div style="background:var(--s2);border-radius:12px;padding:14px">
+            <div style="font-size:11px;color:var(--light);margin-bottom:4px">${i.filiais?.codigo} — ${i.filiais?.nome}</div>
+            <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--g0)">R$ ${Number(i.meta_vendas).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;color:var(--mid)">Meta Total do Mês</span>
+        <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--g0)">R$ ${Number(totalMeta).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
 function abrirModalSenha(){
   document.getElementById('modal-senha').style.display='flex';
   document.getElementById('senha-atual').value='';
