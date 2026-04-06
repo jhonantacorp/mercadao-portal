@@ -1022,9 +1022,9 @@ function fecharModalSenha(){
 }
 
 async function alterarSenha(){
-  const atual   = document.getElementById('senha-atual').value.trim();
-  const nova    = document.getElementById('senha-nova').value.trim();
-  const confirma= document.getElementById('senha-confirma').value.trim();
+  const atual   = document.getElementById('senha-atual').value;
+  const nova    = document.getElementById('senha-nova').value;
+  const confirma= document.getElementById('senha-confirma').value;
   const erroEl  = document.getElementById('senha-erro');
   const okEl    = document.getElementById('senha-ok');
 
