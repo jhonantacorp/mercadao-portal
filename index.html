@@ -758,17 +758,17 @@ const PERFIL_CONFIG = {
 
 // ══ NAVS ══
 const NAVS = {
-  col:[
+  colaborador:[
     {icon:'📊', label:'Meu Desempenho', page:'col-dash', section:'Principal'},
     {icon:'📅', label:'Histórico', page:'col-hist'},
     {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
   ],
-  ger:[
-    {icon:'🏪', label:'Minha Filial', page:'ger-dash', section:'Filial SP-03'},
+  gerente:[
+    {icon:'🏪', label:'Minha Filial', page:'ger-dash', section:'Minha Filial'},
     {icon:'🏆', label:'Ranking Filial', page:'dir-ranking'},
     {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
   ],
-  dir:[
+  diretoria:[
     {icon:'🏢', label:'Visão Geral', page:'dir-dash', section:'Rede'},
     {icon:'🏆', label:'Ranking Geral', page:'dir-ranking'},
     {icon:'📊', label:'Relatórios', page:'col-hist'},
@@ -781,6 +781,14 @@ const NAVS = {
     {icon:'⚙️', label:'Configurações', page:'settings'},
     {icon:'👤', label:'Meu Perfil', page:'col-perfil'},
   ],
+};
+
+// Páginas permitidas por perfil (segurança extra)
+const PAGES_PERMITIDAS = {
+  colaborador: ['col-dash','col-hist','col-perfil'],
+  gerente:     ['ger-dash','dir-ranking','col-perfil'],
+  diretoria:   ['dir-dash','dir-ranking','col-hist','col-perfil'],
+  admin:       ['dir-dash','dir-ranking','admin-users','settings','col-hist','col-perfil'],
 };
 
 const PAGE_TITLES = {
@@ -974,6 +982,12 @@ function buildSidebar(){
 }
 
 function navigateTo(pageId){
+  // Verificar se o perfil tem acesso à página
+  const permitidas = PAGES_PERMITIDAS[currentUser?.perfil] || [];
+  if(currentUser && !permitidas.includes(pageId)){
+    console.warn(`Acesso negado à página ${pageId} para perfil ${currentUser.perfil}`);
+    return;
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   const pg=document.getElementById('page-'+pageId);
