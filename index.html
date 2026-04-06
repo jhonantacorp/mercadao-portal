@@ -541,7 +541,7 @@ tr:hover td{background:var(--s2);}
             </div>
             <div class="perfil-actions">
               <button class="btn-outline">✏️ Editar dados</button>
-              <button class="btn-outline">🔑 Alterar senha</button>
+              <button class="btn-outline" onclick="abrirModalSenha()">🔑 Alterar senha</button>
               <button class="btn-primary" onclick="doLogout()">🚪 Sair</button>
             </div>
           </div>
@@ -708,6 +708,35 @@ tr:hover td{background:var(--s2);}
 
   </div><!-- /main -->
 </div><!-- /screen-app -->
+
+<!-- MODAL ALTERAR SENHA -->
+<div id="modal-senha" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:400px;margin:20px;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:fadeUp .3s ease;">
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">🔑 Alterar Senha</div>
+    <div style="font-size:13px;color:var(--light);margin-bottom:24px;">Digite sua senha atual e a nova senha</div>
+
+    <div class="field-group">
+      <label>SENHA ATUAL</label>
+      <input type="password" id="senha-atual" placeholder="••••••••"/>
+    </div>
+    <div class="field-group">
+      <label>NOVA SENHA</label>
+      <input type="password" id="senha-nova" placeholder="Mínimo 6 caracteres"/>
+    </div>
+    <div class="field-group">
+      <label>CONFIRMAR NOVA SENHA</label>
+      <input type="password" id="senha-confirma" placeholder="Repita a nova senha"/>
+    </div>
+
+    <div id="senha-erro" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none;"></div>
+    <div id="senha-ok" style="color:var(--g3);font-size:12px;margin-bottom:12px;display:none;">✅ Senha alterada com sucesso!</div>
+
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn-outline" style="flex:1" onclick="fecharModalSenha()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="alterarSenha()">Salvar</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -977,6 +1006,81 @@ function showToast(msg){
   t.textContent=msg; t.style.display='block';
   setTimeout(()=>t.style.display='none',2800);
 }
+
+// ══ ALTERAR SENHA ══
+function abrirModalSenha(){
+  document.getElementById('modal-senha').style.display='flex';
+  document.getElementById('senha-atual').value='';
+  document.getElementById('senha-nova').value='';
+  document.getElementById('senha-confirma').value='';
+  document.getElementById('senha-erro').style.display='none';
+  document.getElementById('senha-ok').style.display='none';
+}
+
+function fecharModalSenha(){
+  document.getElementById('modal-senha').style.display='none';
+}
+
+async function alterarSenha(){
+  const atual   = document.getElementById('senha-atual').value.trim();
+  const nova    = document.getElementById('senha-nova').value.trim();
+  const confirma= document.getElementById('senha-confirma').value.trim();
+  const erroEl  = document.getElementById('senha-erro');
+  const okEl    = document.getElementById('senha-ok');
+
+  erroEl.style.display='none';
+  okEl.style.display='none';
+
+  if(!atual||!nova||!confirma){
+    erroEl.textContent='❌ Preencha todos os campos.';
+    erroEl.style.display='block'; return;
+  }
+  if(nova.length < 6){
+    erroEl.textContent='❌ A nova senha deve ter no mínimo 6 caracteres.';
+    erroEl.style.display='block'; return;
+  }
+  if(nova !== confirma){
+    erroEl.textContent='❌ A confirmação não coincide com a nova senha.';
+    erroEl.style.display='block'; return;
+  }
+
+  // Verificar senha atual no banco
+  const {data, error} = await supa
+    .from('colaboradores')
+    .select('id, senha_hash')
+    .eq('id', currentUser.id)
+    .single();
+
+  if(error || !data){
+    erroEl.textContent='❌ Erro ao verificar senha. Tente novamente.';
+    erroEl.style.display='block'; return;
+  }
+
+  if(data.senha_hash !== atual){
+    erroEl.textContent='❌ Senha atual incorreta.';
+    erroEl.style.display='block'; return;
+  }
+
+  // Atualizar senha no banco
+  const {error: updErr} = await supa
+    .from('colaboradores')
+    .update({senha_hash: nova})
+    .eq('id', currentUser.id);
+
+  if(updErr){
+    erroEl.textContent='❌ Erro ao salvar. Tente novamente.';
+    erroEl.style.display='block'; return;
+  }
+
+  okEl.style.display='block';
+  setTimeout(()=>fecharModalSenha(), 2000);
+  showToast('✅ Senha alterada com sucesso!');
+}
+
+// Fechar modal clicando fora
+document.getElementById('modal-senha').addEventListener('click', function(e){
+  if(e.target===this) fecharModalSenha();
+});
 
 // Enter key on login
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('screen-login').classList.contains('active'))doLogin();});
