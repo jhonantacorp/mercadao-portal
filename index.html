@@ -562,38 +562,8 @@ tr:hover td{background:var(--s2);}
 
     <!-- PAGE: GERENTE - MINHA FILIAL -->
     <div class="page" id="page-ger-dash">
-      <div class="banner">
-        <div class="banner-text">
-          <h2>Filial SP-03 — Tatuapé 🏪</h2>
-          <p>Visão gerencial da filial — Abril 2025</p>
-        </div>
-        <div class="banner-score">
-          <div class="score-val">87</div>
-          <div class="score-lbl">Score Filial</div>
-          <div class="score-tag">✅ Na Meta</div>
-        </div>
-      </div>
-      <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-icon ig">💰</div><div class="kpi-val">R$312k</div><div class="kpi-lbl">Faturamento Total</div><div class="kpi-delta up">▲ 9% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:78%;background:var(--g3)"></div></div></div>
-        <div class="kpi-card"><div class="kpi-icon igo">👥</div><div class="kpi-val">12</div><div class="kpi-lbl">Colaboradores Ativos</div><div class="kpi-delta up">▲ 0 vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:var(--gold)"></div></div></div>
-        <div class="kpi-card"><div class="kpi-icon ioo">😊</div><div class="kpi-val">94%</div><div class="kpi-lbl">NPS Médio Filial</div><div class="kpi-delta up">▲ 2% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:94%;background:var(--orange)"></div></div></div>
-        <div class="kpi-card"><div class="kpi-icon ibl">🎯</div><div class="kpi-val">81%</div><div class="kpi-lbl">Meta Atingida</div><div class="kpi-delta dn">▼ 3% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:81%;background:var(--blue)"></div></div></div>
-      </div>
-      <div class="sec-hdr"><div class="sec-title">Desempenho dos Colaboradores — SP-03</div></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>#</th><th>Colaborador</th><th>Cargo</th><th>Vendas</th><th>NPS</th><th>Atend.</th><th>Score</th></tr></thead>
-          <tbody>
-            <tr><td>🥇</td><td><strong>Maria Costa</strong></td><td>Farmacêutica</td><td>R$52k</td><td>99%</td><td>380</td><td class="td-score score-high">96</td></tr>
-            <tr><td>🥈</td><td><strong>Pedro Torres</strong></td><td>Atendente</td><td>R$49k</td><td>97%</td><td>365</td><td class="td-score score-high">94</td></tr>
-            <tr><td>🥉</td><td><strong>João Silva</strong></td><td>Farmacêutico</td><td>R$48k</td><td>97%</td><td>342</td><td class="td-score score-high">92</td></tr>
-            <tr><td>4</td><td>Ana Lima</td><td>Atendente</td><td>R$44k</td><td>93%</td><td>310</td><td class="td-score score-high">88</td></tr>
-            <tr><td>5</td><td>Rafael Mendes</td><td>Estoquista</td><td>R$38k</td><td>90%</td><td>290</td><td class="td-score score-mid">83</td></tr>
-            <tr><td>6</td><td>Carla Souza</td><td>Atendente</td><td>R$35k</td><td>88%</td><td>275</td><td class="td-score score-mid">79</td></tr>
-            <tr><td>7</td><td>Bruno Alves</td><td>Caixa</td><td>R$30k</td><td>85%</td><td>260</td><td class="td-score score-mid">74</td></tr>
-            <tr><td>8</td><td>Fernanda Rocha</td><td>Atendente</td><td>R$28k</td><td>82%</td><td>240</td><td class="td-score score-low">68</td></tr>
-          </tbody>
-        </table>
+      <div id="ger-dash-content">
+        <div style="text-align:center;color:var(--light);padding:40px">Carregando dados da filial...</div>
       </div>
     </div>
 
@@ -611,10 +581,10 @@ tr:hover td{background:var(--s2);}
         </div>
       </div>
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-icon ig">💰</div><div class="kpi-val">R$3,8M</div><div class="kpi-lbl">Faturamento Total Rede</div><div class="kpi-delta up">▲ 11% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:82%;background:var(--g3)"></div></div></div>
-        <div class="kpi-card"><div class="kpi-icon igo">🏪</div><div class="kpi-val">12</div><div class="kpi-lbl">Filiais Ativas</div><div class="kpi-delta up">▲ 100% operacional</div><div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:var(--gold)"></div></div></div>
-        <div class="kpi-card"><div class="kpi-icon ioo">👥</div><div class="kpi-val">148</div><div class="kpi-lbl">Total Colaboradores</div><div class="kpi-delta up">▲ 3 novos este mês</div><div class="kpi-bar"><div class="kpi-fill" style="width:74%;background:var(--orange)"></div></div></div>
-        <div class="kpi-card"><div class="kpi-icon ibl">🎯</div><div class="kpi-val">79%</div><div class="kpi-lbl">Meta Rede Atingida</div><div class="kpi-delta dn">▼ 1% vs mês ant.</div><div class="kpi-bar"><div class="kpi-fill" style="width:79%;background:var(--blue)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ig">💰</div><div class="kpi-val" id="dir-fat-total">—</div><div class="kpi-lbl">Faturamento Total Rede</div><div class="kpi-delta up">KPIs importados</div><div class="kpi-bar"><div class="kpi-fill" style="width:80%;background:var(--g3)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon igo">🏪</div><div class="kpi-val" id="dir-filiais-total">—</div><div class="kpi-lbl">Filiais Ativas</div><div class="kpi-delta up">▲ 100% operacional</div><div class="kpi-bar"><div class="kpi-fill" style="width:100%;background:var(--gold)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ioo">👥</div><div class="kpi-val" id="dir-colab-total">—</div><div class="kpi-lbl">Total Colaboradores</div><div class="kpi-delta up">Ativos no sistema</div><div class="kpi-bar"><div class="kpi-fill" style="width:74%;background:var(--orange)"></div></div></div>
+        <div class="kpi-card"><div class="kpi-icon ibl">🎯</div><div class="kpi-val" id="dir-meta-total">—</div><div class="kpi-lbl">Meta Rede Atingida</div><div class="kpi-delta">Baseado nos KPIs</div><div class="kpi-bar"><div class="kpi-fill" id="dir-meta-bar" style="width:0%;background:var(--blue)"></div></div></div>
       </div>
       <div class="sec-hdr"><div class="sec-title">Desempenho por Filial</div><div class="sec-link">Exportar →</div></div>
       <div class="filiais-grid" id="filiais-dinamico">
@@ -917,6 +887,7 @@ const PAGE_TITLES = {
 
 let currentUser=null; let currentPage='';
 let dadosFiliais=[], dadosColaboradores=[], dadosKpis=[];
+let filiaisGerente=[]; // filiais vinculadas ao gerente logado
 
 async function doLogin(){
   const u=document.getElementById('inp-user').value.trim().toLowerCase();
@@ -925,68 +896,57 @@ async function doLogin(){
   const btn=document.querySelector('.btn-login');
 
   if(!u||!p){errEl.style.display='block';errEl.textContent='❌ Preencha usuário e senha.';return;}
-
   btn.textContent='Entrando...';btn.disabled=true;
 
   try{
-    // Buscar colaborador no banco
     const {data,error}=await supa
       .from('colaboradores')
       .select('*, filiais(codigo,nome,bandeira_id, bandeiras(nome,cor_primaria))')
-      .eq('login',u)
-      .eq('ativo',true)
-      .single();
+      .eq('login',u).eq('ativo',true).single();
 
     if(error||!data){
-      errEl.style.display='block';
-      errEl.textContent='❌ Usuário não encontrado.';
-      btn.textContent='Entrar';btn.disabled=false;
-      return;
+      errEl.style.display='block';errEl.textContent='❌ Usuário não encontrado.';
+      btn.textContent='Entrar';btn.disabled=false;return;
     }
-
-    // Verificar senha (simples por enquanto — fase 2 usa bcrypt)
     if(data.senha_hash!==p){
-      errEl.style.display='block';
-      errEl.textContent='❌ Senha incorreta.';
-      btn.textContent='Entrar';btn.disabled=false;
-      return;
+      errEl.style.display='block';errEl.textContent='❌ Senha incorreta.';
+      btn.textContent='Entrar';btn.disabled=false;return;
     }
-
     errEl.style.display='none';
 
     const perfil=data.perfil;
     const cfg=PERFIL_CONFIG[perfil]||PERFIL_CONFIG.colaborador;
     const iniciais=(data.nome||'?').split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase();
-    const filialNome=data.filiais?`${data.filiais.codigo} — ${data.filiais.nome}`:'Todas as Filiais';
+
+    // Para gerente: buscar filiais vinculadas
+    filiaisGerente=[];
+    if(perfil==='gerente'){
+      const {data:gf}=await supa.from('gerente_filial')
+        .select('filial_id, filiais(id,codigo,nome,bandeira_id)')
+        .eq('colaborador_id',data.id);
+      filiaisGerente=(gf||[]).map(g=>g.filiais);
+    }
+
+    const filialNome = perfil==='gerente'
+      ? (filiaisGerente.length>1 ? filiaisGerente.map(f=>f.codigo).join(' + ') : filiaisGerente[0]?.nome||'—')
+      : data.filiais ? `${data.filiais.codigo} — ${data.filiais.nome}` : 'Todas as Filiais';
 
     currentUser={
-      id: data.id,
-      name: data.nome,
-      login: u,
-      cargo: data.cargo||'',
-      perfil,
-      filial_id: data.filial_id,
-      filialNome,
-      role: `${data.cargo||''} · ${filialNome}`,
-      badge: cfg.badge,
-      badgeClass: cfg.badgeClass,
-      av: iniciais,
-      avBg: cfg.avBg,
-      avColor: cfg.avColor,
+      id:data.id, name:data.nome, login:u, cargo:data.cargo||'',
+      perfil, filial_id:data.filial_id, filialNome,
+      role:`${data.cargo||''} · ${filialNome}`,
+      badge:cfg.badge, badgeClass:cfg.badgeClass,
+      av:iniciais, avBg:cfg.avBg, avColor:cfg.avColor,
     };
 
-    // Carregar dados do banco em paralelo
     await carregarDados();
-
     document.getElementById('screen-login').classList.remove('active');
     document.getElementById('screen-app').classList.add('active');
     buildSidebar();
-    const firstPage=NAVS[perfil]?.[0]?.page || 'col-dash';
-    navigateTo(firstPage);
+    navigateTo(NAVS[perfil]?.[0]?.page||'col-dash');
 
   }catch(e){
-    errEl.style.display='block';
-    errEl.textContent='❌ Erro de conexão. Tente novamente.';
+    errEl.style.display='block';errEl.textContent='❌ Erro de conexão. Tente novamente.';
     console.error(e);
   }
   btn.textContent='Entrar';btn.disabled=false;
@@ -999,11 +959,9 @@ async function carregarDados(){
       supa.from('colaboradores').select('*, filiais(codigo,nome)').eq('ativo',true).order('nome'),
       supa.from('kpis').select('*, colaboradores(nome,cargo,filial_id)').order('score',{ascending:false}),
     ]);
-    dadosFiliais   = f.data||[];
-    dadosColaboradores = c.data||[];
-    dadosKpis      = k.data||[];
-
-    // Atualizar cards dinâmicos se estiver na tela de diretoria
+    dadosFiliais=f.data||[];
+    dadosColaboradores=c.data||[];
+    dadosKpis=k.data||[];
     renderizarFiliais();
     renderizarRankingGeral();
     renderizarKpisColaborador();
@@ -1014,12 +972,14 @@ function renderizarFiliais(){
   const grid=document.getElementById('filiais-dinamico');
   if(!grid||!dadosFiliais.length)return;
   grid.innerHTML='';
+  let fatTotal=0, colabTotal=dadosColaboradores.length;
   dadosFiliais.forEach(f=>{
     const isCat=f.bandeira_id===2;
     const kpisFilial=dadosKpis.filter(k=>k.colaboradores?.filial_id===f.id);
     const scoreMedio=kpisFilial.length?Math.round(kpisFilial.reduce((a,k)=>a+Number(k.score),0)/kpisFilial.length):0;
     const fat=kpisFilial.reduce((a,k)=>a+Number(k.vendas_valor||0),0);
-    const fatStr=fat>=1000?`R$${(fat/1000).toFixed(0)}k`:`R$${fat}`;
+    fatTotal+=fat;
+    const fatStr=fat>=1000000?`R$${(fat/1000000).toFixed(1)}M`:fat>=1000?`R$${(fat/1000).toFixed(0)}k`:`R$${fat}`;
     const scoreColor=scoreMedio>=90?'var(--g2)':scoreMedio>=75?'var(--g2)':scoreMedio>=60?'var(--orange)':'var(--red)';
     grid.innerHTML+=`
       <div class="filial-card ${isCat?'catatau':''}">
@@ -1028,12 +988,19 @@ function renderizarFiliais(){
           <div class="filial-bandeira ${isCat?'fb-cat':'fb-blue'}">${isCat?'🐊 Catatau Farma':'Mercadão'}</div>
         </div>
         <div class="filial-stats">
-          <div class="fs-item"><div class="fs-val">${fatStr}</div><div class="fs-lbl">Faturamento</div></div>
-          <div class="fs-item"><div class="fs-val" style="color:${scoreColor};font-family:Syne,sans-serif;font-weight:800">${scoreMedio||'—'}</div><div class="fs-lbl">Score</div></div>
+          <div class="fs-item"><div class="fs-val">${fatStr||'—'}</div><div class="fs-lbl">Faturamento</div></div>
+          <div class="fs-item"><div class="fs-val" style="color:${scoreColor||'var(--light)'};font-family:Syne,sans-serif;font-weight:800">${scoreMedio||'—'}</div><div class="fs-lbl">Score</div></div>
         </div>
         <div class="filial-bar"><div class="filial-fill" style="width:${scoreMedio}%"></div></div>
       </div>`;
   });
+  // Atualizar KPIs da visão geral
+  const fatStr=fatTotal>=1000000?`R$${(fatTotal/1000000).toFixed(1)}M`:fatTotal>=1000?`R$${(fatTotal/1000).toFixed(0)}k`:'—';
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('dir-fat-total', fatTotal>0?fatStr:'Sem KPIs');
+  el('dir-filiais-total', dadosFiliais.length);
+  el('dir-colab-total', colabTotal);
+  el('dir-meta-total', '—');
 }
 
 function renderizarRankingGeral(){
@@ -1121,6 +1088,7 @@ function navigateTo(pageId){
   if(pageId==='dir-metas') carregarMetasFiliais();
   if(pageId==='ger-metas') iniciarPaginaGerente();
   if(pageId==='col-metas') carregarMetasColaborador();
+  if(pageId==='ger-dash') renderizarGerDash();
 }
 
 // Period selector
@@ -1295,6 +1263,52 @@ async function toggleAtivo(id, ativoAtual){
   carregarTabelaColaboradores();
 }
 
+async function renderizarGerDash(){
+  const content = document.getElementById('ger-dash-content');
+  if(!content) return;
+  if(!filiaisGerente.length){ content.innerHTML='<div style="text-align:center;padding:40px;color:var(--light)">Nenhuma filial vinculada.</div>'; return; }
+
+  let html='';
+  for(const f of filiaisGerente){
+    const colabs = dadosColaboradores.filter(c=>c.filial_id===f.id);
+    const kpisF  = dadosKpis.filter(k=>k.colaboradores?.filial_id===f.id);
+    const fat    = kpisF.reduce((a,k)=>a+Number(k.vendas_valor||0),0);
+    const fatStr = fat>=1000?`R$${(fat/1000).toFixed(0)}k`:'—';
+    const scoreM = kpisF.length?Math.round(kpisF.reduce((a,k)=>a+Number(k.score),0)/kpisF.length):0;
+    const medals = ['🥇','🥈','🥉'];
+
+    html+=`
+    <div class="banner" style="margin-bottom:16px">
+      <div class="banner-text"><h2>${f.codigo} — ${f.nome} 🏪</h2><p>Visão gerencial da filial</p></div>
+      ${scoreM?`<div class="banner-score"><div class="score-val">${scoreM}</div><div class="score-lbl">Score Filial</div><div class="score-tag">${scoreM>=90?'⭐ Destaque':scoreM>=75?'✅ Na Meta':'⚠️ Atenção'}</div></div>`:''}
+    </div>
+    <div class="kpi-grid" style="margin-bottom:20px">
+      <div class="kpi-card"><div class="kpi-icon ig">💰</div><div class="kpi-val">${fatStr}</div><div class="kpi-lbl">Faturamento</div></div>
+      <div class="kpi-card"><div class="kpi-icon igo">👥</div><div class="kpi-val">${colabs.length}</div><div class="kpi-lbl">Colaboradores Ativos</div></div>
+      <div class="kpi-card"><div class="kpi-icon ibl">🎯</div><div class="kpi-val">${scoreM||'—'}</div><div class="kpi-lbl">Score Médio</div></div>
+    </div>
+    <div class="sec-hdr"><div class="sec-title">Equipe — ${f.nome}</div></div>
+    <div class="table-wrap" style="margin-bottom:28px">
+      <table>
+        <thead><tr><th>#</th><th>Colaborador</th><th>Cargo</th><th>Score</th></tr></thead>
+        <tbody>`;
+
+    if(kpisF.length){
+      kpisF.forEach((k,i)=>{
+        const sc=Number(k.score||0);
+        const cls=sc>=90?'score-high':sc>=75?'score-high':'score-mid';
+        html+=`<tr><td>${medals[i]||i+1}</td><td><strong>${k.colaboradores?.nome||'—'}</strong></td><td>${k.colaboradores?.cargo||'—'}</td><td class="td-score ${cls}">${sc}</td></tr>`;
+      });
+    } else {
+      colabs.forEach((c,i)=>{
+        html+=`<tr><td>${i+1}</td><td><strong>${c.nome}</strong></td><td>${c.cargo||'—'}</td><td style="color:var(--light)">—</td></tr>`;
+      });
+    }
+    html+=`</tbody></table></div>`;
+  }
+  content.innerHTML=html;
+}
+
 // ══ METAS — DIRETORIA/ADMIN ══
 let metasFiliais = {};
 
@@ -1342,21 +1356,19 @@ let colabsFilialGerente = [];
 let metaFilialGerente = 0;
 
 async function iniciarPaginaGerente(){
-  // Carregar filiais do gerente
-  const {data:gf} = await supa.from('gerente_filial')
-    .select('filial_id, filiais(id,codigo,nome)')
-    .eq('colaborador_id', currentUser.id);
-
   const sel = document.getElementById('ger-metas-filial');
   if(!sel) return;
   sel.innerHTML = '<option value="">Selecione a filial...</option>';
-  (gf||[]).forEach(g=>{
-    const op = document.createElement('option');
-    op.value = g.filial_id;
-    op.textContent = `${g.filiais.codigo} — ${g.filiais.nome}`;
+  filiaisGerente.forEach(f=>{
+    const op=document.createElement('option');
+    op.value=f.id;
+    op.textContent=`${f.codigo} — ${f.nome}`;
     sel.appendChild(op);
   });
-  if(gf?.length===1){ sel.value=gf[0].filial_id; carregarMetasGerente(); }
+  if(filiaisGerente.length===1){
+    sel.value=filiaisGerente[0].id;
+    carregarMetasGerente();
+  }
 }
 
 async function carregarMetasGerente(){
