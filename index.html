@@ -338,6 +338,151 @@ tr:hover td{background:var(--s2);}
 }
 .bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
 
+
+/* GERENTE — DISTRIBUIÇÃO DE METAS 2.0 */
+.gm-toolbar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  flex-wrap:wrap;margin-bottom:16px;
+}
+.gm-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.gm-tabbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px;}
+.gm-tab{
+  padding:10px 16px;border-radius:999px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--mid);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;
+}
+.gm-tab:hover{border-color:var(--g3);color:var(--g2);}
+.gm-tab.active{background:var(--g2);border-color:var(--g2);color:#fff;}
+.gm-view{display:none;}
+.gm-view.active{display:block;}
+.gm-layout{display:grid;grid-template-columns:340px 1fr;gap:18px;}
+.gm-list-card,.gm-editor-card,.gm-import-card{
+  background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);padding:20px;
+}
+.gm-list-top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;
+}
+.gm-search{
+  width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--surface);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;
+}
+.gm-search:focus{border-color:var(--g3);}
+.gm-collab-list{display:flex;flex-direction:column;gap:10px;max-height:620px;overflow:auto;padding-right:2px;}
+.gm-collab-item{
+  border:1.5px solid var(--border);border-radius:14px;background:#fff;padding:12px;
+  display:flex;justify-content:space-between;gap:12px;cursor:pointer;transition:all .15s;
+}
+.gm-collab-item:hover{border-color:#aabce9;transform:translateY(-1px);}
+.gm-collab-item.active{border-color:var(--g2);background:#eef3ff;box-shadow:0 6px 18px rgba(26,76,200,.10);}
+.gm-collab-main{min-width:0;flex:1;}
+.gm-collab-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.35;}
+.gm-collab-meta{font-size:11px;color:var(--light);margin-top:4px;line-height:1.45;}
+.gm-collab-meta strong{color:var(--mid);}
+.gm-item-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;}
+.gm-pill{
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;
+  background:var(--s2);color:var(--mid);white-space:nowrap;
+}
+.gm-link-btn{
+  border:none;background:none;cursor:pointer;font-size:12px;font-weight:700;
+  color:var(--g2);padding:0;
+}
+.gm-link-btn.danger{color:var(--red);}
+.gm-summary-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;
+}
+.gm-summary-card{
+  background:linear-gradient(180deg,#fff,#f8faff);border:1px solid var(--s2);
+  border-radius:14px;padding:14px 16px;
+}
+.gm-summary-label{font-size:11px;color:var(--light);margin-bottom:6px;}
+.gm-summary-value{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--g0);line-height:1;
+}
+.gm-summary-sub{font-size:11px;color:var(--light);margin-top:5px;}
+.gm-editor-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px;
+}
+.gm-editor-empty{
+  min-height:360px;display:flex;align-items:center;justify-content:center;text-align:center;
+  color:var(--light);border:1.5px dashed var(--border);border-radius:16px;background:#fafcff;padding:28px;
+}
+.gm-editor-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);}
+.gm-editor-sub{font-size:12px;color:var(--light);margin-top:4px;}
+.gm-groups{display:flex;flex-direction:column;gap:14px;}
+.gm-group{border:1px solid var(--s2);border-radius:14px;overflow:hidden;background:#fff;}
+.gm-group-head{
+  background:var(--s2);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  font-size:12px;font-weight:700;color:var(--mid);
+}
+.gm-group-body{display:flex;flex-direction:column;}
+.gm-meta-row{
+  display:grid;grid-template-columns:minmax(200px,1.4fr) 120px 150px;gap:10px;align-items:center;
+  padding:12px 14px;border-top:1px solid var(--s2);
+}
+.gm-meta-row:first-child{border-top:none;}
+.gm-meta-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.35;}
+.gm-meta-help{font-size:11px;color:var(--light);margin-top:4px;}
+.gm-total-filial{
+  text-align:right;font-size:12px;font-weight:800;color:var(--g0);line-height:1.35;
+}
+.gm-total-filial small{display:block;color:var(--light);font-weight:500;}
+.gm-input{
+  width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--surface);font-family:'DM Sans',sans-serif;font-size:13px;text-align:right;outline:none;
+}
+.gm-input:focus{border-color:var(--g3);}
+.gm-resumo-box{
+  margin-top:18px;border:1px solid var(--s2);border-radius:14px;overflow:hidden;background:#fff;
+}
+.gm-resumo-head{
+  padding:12px 14px;background:var(--s2);font-size:12px;font-weight:700;color:var(--mid);
+}
+.gm-resumo-table{width:100%;border-collapse:collapse;}
+.gm-resumo-table th,.gm-resumo-table td{
+  padding:10px 12px;border-top:1px solid var(--s2);font-size:12px;text-align:left;
+}
+.gm-resumo-table th{background:#fafcff;color:var(--light);font-size:10px;text-transform:uppercase;letter-spacing:.04em;}
+.gm-resumo-table td.num{text-align:right;font-weight:700;}
+.gm-balance.ok{color:var(--g2);}
+.gm-balance.warn{color:var(--orange);}
+.gm-balance.err{color:var(--red);}
+.gm-import-card ul{margin:10px 0 0 18px;color:var(--mid);font-size:12px;line-height:1.7;}
+.gm-drop{
+  border:2px dashed var(--border);border-radius:16px;padding:26px;text-align:center;background:#fafcff;
+  color:var(--mid);margin-top:14px;
+}
+.gm-drop strong{display:block;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;margin-bottom:6px;}
+.gm-preview{
+  margin-top:18px;background:var(--s2);border-radius:14px;padding:16px;
+}
+.gm-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 12px;}
+.gm-preview-card{background:#fff;border-radius:12px;padding:12px;border:1px solid rgba(10,31,92,.06);}
+.gm-preview-card .v{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--g0);}
+.gm-preview-card .l{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
+.gm-small{font-size:11px;color:var(--light);line-height:1.6;}
+.gm-import-errors{margin-top:10px;padding:10px 12px;background:#fff5f5;border:1px solid #ffd8d8;border-radius:10px;color:#a13232;font-size:12px;line-height:1.6;}
+.gm-import-ok{margin-top:10px;padding:10px 12px;background:#eef9f1;border:1px solid #cdebd3;border-radius:10px;color:#1b6f3d;font-size:12px;line-height:1.6;}
+.gm-top-note{
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;padding:12px 14px;border-radius:12px;
+  background:#f7f9ff;border:1px solid var(--s2);font-size:12px;color:var(--mid);line-height:1.6;
+}
+.gm-top-note strong{color:var(--text);}
+@media(max-width:1100px){
+  .gm-layout{grid-template-columns:1fr;}
+  .gm-collab-list{max-height:none;}
+}
+@media(max-width:768px){
+  .gm-toolbar{flex-direction:column;align-items:stretch;}
+  .gm-actions{width:100%;}
+  .gm-actions > *{flex:1;}
+  .gm-summary-grid,.gm-preview-grid{grid-template-columns:1fr;}
+  .gm-meta-row{grid-template-columns:1fr;}
+  .gm-total-filial{text-align:left;}
+  .gm-item-actions{align-items:flex-start;}
+}
+
+
 /* TOAST */
 .toast{
   position:fixed;bottom:24px;right:24px;background:#050e2e;color:#fff;
@@ -702,12 +847,12 @@ tr:hover td{background:var(--s2);}
       <div class="banner">
         <div class="banner-text">
           <h2>🎯 Distribuir Metas do Time</h2>
-          <p id="ger-metas-status-txt">Verifique se o período de distribuição está aberto</p>
+          <p id="ger-metas-status-txt">Escolha a filial e o período para lançar as metas por colaborador ou importar por planilha.</p>
         </div>
       </div>
 
       <!-- STATUS DO PERÍODO -->
-      <div id="ger-metas-bloqueado" style="display:none" class="chart-card" style="margin-bottom:16px">
+      <div id="ger-metas-bloqueado" style="display:none" class="chart-card">
         <div style="text-align:center;padding:24px">
           <div style="font-size:40px">🔒</div>
           <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-top:8px">Período de distribuição fechado</div>
@@ -716,24 +861,39 @@ tr:hover td{background:var(--s2);}
       </div>
 
       <div id="ger-metas-form">
-        <div class="filter-bar">
-          <select class="filter-select" id="ger-metas-filial" onchange="carregarMetasGerente()">
-            <option value="">Selecione a filial...</option>
-          </select>
-          <select class="filter-select" id="ger-metas-mes">
-            <option value="3">Março</option><option value="4" selected>Abril</option>
-            <option value="5">Maio</option><option value="6">Junho</option>
-            <option value="7">Julho</option><option value="8">Agosto</option>
-            <option value="9">Setembro</option><option value="10">Outubro</option>
-            <option value="11">Novembro</option><option value="12">Dezembro</option>
-          </select>
-          <select class="filter-select" id="ger-metas-ano">
-            <option value="2025">2025</option><option value="2026" selected>2026</option>
-          </select>
-          <button class="btn-primary" style="padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px" onclick="carregarMetasGerente()">🔄 Carregar</button>
+        <div class="gm-toolbar">
+          <div class="filter-bar" style="margin-bottom:0">
+            <select class="filter-select" id="ger-metas-filial" onchange="carregarMetasGerente()">
+              <option value="">Selecione a filial...</option>
+            </select>
+            <select class="filter-select" id="ger-metas-mes">
+              <option value="3">Março</option><option value="4" selected>Abril</option>
+              <option value="5">Maio</option><option value="6">Junho</option>
+              <option value="7">Julho</option><option value="8">Agosto</option>
+              <option value="9">Setembro</option><option value="10">Outubro</option>
+              <option value="11">Novembro</option><option value="12">Dezembro</option>
+            </select>
+            <select class="filter-select" id="ger-metas-ano">
+              <option value="2025">2025</option><option value="2026" selected>2026</option>
+            </select>
+            <button class="btn-primary" style="padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px" onclick="carregarMetasGerente()">🔄 Carregar</button>
+          </div>
+
+          <div class="gm-actions">
+            <button class="btn-outline" onclick="abrirModalAdicionarDistribuicao()">➕ Incluir colaborador</button>
+            <button class="btn-outline" onclick="exportarModeloMetasExcel()">⬇️ Exportar modelo Excel</button>
+            <button class="btn-primary" onclick="document.getElementById('ger-metas-file').click()">⬆️ Importar planilha</button>
+            <input type="file" id="ger-metas-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="lerArquivoImportacaoMetas(event)"/>
+          </div>
         </div>
+
+        <div class="gm-tabbar">
+          <button id="gm-tab-manual" class="gm-tab active" onclick="trocarAbaGerMetas('manual')">Lançamento Manual</button>
+          <button id="gm-tab-import" class="gm-tab" onclick="trocarAbaGerMetas('import')">Importar Planilha</button>
+        </div>
+
         <div id="ger-metas-content">
-          <div style="text-align:center;color:var(--light);padding:32px">Selecione uma filial e clique em Carregar</div>
+          <div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">Selecione uma filial e clique em Carregar</div>
         </div>
       </div>
     </div>
@@ -872,8 +1032,35 @@ tr:hover td{background:var(--s2);}
   </div>
 </div>
 
+
+<div id="modal-dist-colab" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:460px;margin:20px;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:fadeUp .3s ease;">
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">➕ Incluir colaborador na distribuição</div>
+    <div style="font-size:13px;color:var(--light);margin-bottom:20px;">Adicione um colaborador ao período selecionado para lançar metas individualmente.</div>
+
+    <div class="field-group">
+      <label>COLABORADOR</label>
+      <select id="dist-colab-select" class="filter-select" style="width:100%">
+        <option value="">Selecione...</option>
+      </select>
+    </div>
+
+    <div id="dist-colab-hint" class="login-hint" style="margin-bottom:14px">
+      O colaborador será vinculado apenas à filial e ao período atualmente selecionados.
+    </div>
+
+    <div id="dist-colab-erro" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none;"></div>
+
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn-outline" style="flex:1" onclick="fecharModalAdicionarDistribuicao()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="salvarColaboradorDistribuicao()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ══ SUPABASE ══
@@ -1516,78 +1703,1034 @@ async function salvarTodasMetasFilial(filialId,mes,ano){
 }
 
 // ══ METAS — GERENTE ══
-let colabsVendas=[];
+let gerMetasState = {
+  aba:'manual',
+  filialId:null,
+  mes:null,
+  ano:null,
+  filial:null,
+  periodoAberto:false,
+  colaboradores:[],
+  metasFilial:[],
+  metaItems:[],
+  currentColabId:null,
+  values:{},
+  existingRows:{},
+  importPreview:null,
+};
+
+function normalizarTexto(v=''){
+  return String(v || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toLowerCase();
+}
+function montarChaveMeta(colabId,tipoId,campId){
+  return `${colabId}|${tipoId || 0}|${campId || 0}`;
+}
+function obterUnidadeMeta(unidade){
+  if(unidade === 'percentual') return '%';
+  if(unidade === 'quantidade') return 'un';
+  return 'R$';
+}
+function formatarNumeroMeta(valor, unidade, casas = 2){
+  const num = Number(valor || 0);
+  if(unidade === 'percentual') return `${num.toLocaleString('pt-BR',{minimumFractionDigits:casas,maximumFractionDigits:casas})}%`;
+  if(unidade === 'quantidade') return `${num.toLocaleString('pt-BR',{minimumFractionDigits:casas,maximumFractionDigits:casas})} un`;
+  return `R$ ${num.toLocaleString('pt-BR',{minimumFractionDigits:casas,maximumFractionDigits:casas})}`;
+}
+function parseValorPlanilha(valor){
+  if(typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+  const txt = String(valor ?? '').trim();
+  if(!txt) return 0;
+  if(txt.includes(',') && txt.includes('.')){
+    return Number(txt.replace(/\./g,'').replace(',','.')) || 0;
+  }
+  if(txt.includes(',')){
+    return Number(txt.replace(',','.')) || 0;
+  }
+  return Number(txt) || 0;
+}
+function obterItensMetasOrdenados(){
+  return gerMetasState.metaItems || [];
+}
+function obterValorMetaColaborador(colabId, item){
+  const chave = montarChaveMeta(colabId, item.tipoId, item.campId);
+  return Number(gerMetasState.values[chave] || 0);
+}
+function obterResumoDistribuicao(){
+  const itens = obterItensMetasOrdenados();
+  return itens.map(item=>{
+    const distribuido = (gerMetasState.colaboradores || []).reduce((acc,col)=>acc + obterValorMetaColaborador(col.id, item),0);
+    const saldo = Number(item.totalFilial || 0) - distribuido;
+    return {...item, distribuido, saldo};
+  });
+}
+function trocarAbaGerMetas(aba){
+  gerMetasState.aba = aba;
+  const btnManual = document.getElementById('gm-tab-manual');
+  const btnImport = document.getElementById('gm-tab-import');
+  if(btnManual) btnManual.classList.toggle('active', aba === 'manual');
+  if(btnImport) btnImport.classList.toggle('active', aba === 'import');
+  renderizarWorkspaceMetasGerente();
+}
 
 async function iniciarPaginaGerente(){
-  const {data:cfg}=await supa.from('config_sistema').select('valor').eq('chave','distribuicao_metas_aberta').single();
-  const aberto=cfg?.valor==='true';
-  const bloq=document.getElementById('ger-metas-bloqueado');
-  const form=document.getElementById('ger-metas-form');
-  if(bloq)bloq.style.display=aberto?'none':'block';
-  if(form)form.style.display=aberto?'block':'none';
-  if(!aberto)return;
-  if(!tiposMeta.length){
-    const [tm,camp]=await Promise.all([supa.from('tipos_meta').select('*').eq('ativo',true).order('ordem'),supa.from('campanhas').select('*').eq('ativa',true)]);
-    tiposMeta=tm.data||[]; campanhasAtivas=camp.data||[];
+  const {data:cfg} = await supa.from('config_sistema').select('valor').eq('chave','distribuicao_metas_aberta').single();
+  const aberto = cfg?.valor === 'true';
+  gerMetasState.periodoAberto = aberto;
+  const bloq = document.getElementById('ger-metas-bloqueado');
+  const form = document.getElementById('ger-metas-form');
+  const statusTxt = document.getElementById('ger-metas-status-txt');
+  if(bloq) bloq.style.display = aberto ? 'none' : 'block';
+  if(form) form.style.display = aberto ? 'block' : 'none';
+  if(statusTxt){
+    statusTxt.textContent = aberto
+      ? 'Escolha a filial e o período para lançar as metas por colaborador ou importar por planilha.'
+      : 'A distribuição está bloqueada no momento. Aguarde a liberação do período.';
   }
-  const sel=document.getElementById('ger-metas-filial');
-  if(!sel)return;
-  sel.innerHTML='<option value="">Selecione a filial...</option>';
-  filiaisGerente.forEach(f=>{const op=document.createElement('option');op.value=f.id;op.textContent=`${f.codigo} — ${f.nome}`;sel.appendChild(op);});
-  if(filiaisGerente.length===1){sel.value=filiaisGerente[0].id;carregarMetasGerente();}
+  if(!aberto) return;
+
+  if(!tiposMeta.length){
+    const [tm,camp] = await Promise.all([
+      supa.from('tipos_meta').select('*').eq('ativo',true).order('ordem'),
+      supa.from('campanhas').select('*').order('data_inicio')
+    ]);
+    tiposMeta = tm.data || [];
+    campanhasAtivas = camp.data || [];
+  }
+
+  const sel = document.getElementById('ger-metas-filial');
+  if(!sel) return;
+  const anterior = sel.value;
+  sel.innerHTML = '<option value="">Selecione a filial...</option>';
+  filiaisGerente.forEach(f=>{
+    const op = document.createElement('option');
+    op.value = f.id;
+    op.textContent = `${f.codigo} — ${f.nome}`;
+    sel.appendChild(op);
+  });
+  if(anterior && filiaisGerente.some(f=>String(f.id) === String(anterior))){
+    sel.value = anterior;
+  } else if(filiaisGerente.length === 1){
+    sel.value = String(filiaisGerente[0].id);
+  }
+
+  trocarAbaGerMetas(gerMetasState.aba || 'manual');
+
+  if(sel.value){
+    carregarMetasGerente();
+  } else {
+    const content = document.getElementById('ger-metas-content');
+    if(content){
+      content.innerHTML = '<div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">Selecione uma filial e clique em Carregar</div>';
+    }
+  }
 }
 
 async function carregarMetasGerente(){
-  const filialId=parseInt(document.getElementById('ger-metas-filial')?.value||0);
-  const mes=parseInt(document.getElementById('ger-metas-mes')?.value||4);
-  const ano=parseInt(document.getElementById('ger-metas-ano')?.value||2026);
-  const content=document.getElementById('ger-metas-content');
-  if(!content||!filialId)return;
-  content.innerHTML='<div style="text-align:center;color:var(--light);padding:32px">Carregando...</div>';
-  const {data:colab}=await supa.from('colaboradores').select('id,nome,cargo').eq('filial_id',filialId).eq('ativo',true).order('nome');
-  colabsVendas=(colab||[]).filter(c=>CARGOS_VENDAS.includes(c.cargo));
-  const {data:metasF}=await supa.from('metas_filial').select('*,tipos_meta(id,nome,codigo,categoria,unidade),campanhas(id,nome)').eq('filial_id',filialId).eq('mes',mes).eq('ano',ano);
-  const ids=colabsVendas.map(c=>c.id);
-  let metasDist=[];
-  if(ids.length){const {data:md}=await supa.from('metas_colaborador').select('*').in('colaborador_id',ids).eq('filial_id',filialId).eq('mes',mes).eq('ano',ano);metasDist=md||[];}
-  const distMap={};metasDist.forEach(m=>distMap[`${m.colaborador_id}_${m.tipo_meta_id}_${m.campanha_id}`]=m.valor);
-  if(!colabsVendas.length){content.innerHTML='<div style="text-align:center;color:var(--light);padding:32px">Nenhum colaborador de vendas ativo nesta filial.</div>';return;}
-  if(!metasF?.length){content.innerHTML='<div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">⚠️ O administrador ainda não definiu as metas para esta filial neste mês.</div>';return;}
-  const grupos={principal:[],indicador:[],vitamina:[],campanha:[]};
-  metasF.forEach(m=>{if(m.campanha_id)grupos.campanha.push(m);else if(m.tipos_meta)grupos[m.tipos_meta.categoria]?.push(m);});
-  const nomesCat={principal:'📊 Metas Principais',indicador:'📈 Indicadores',vitamina:'💊 Vitaminas',campanha:'🏆 Campanhas'};
-  let html=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn-primary" style="padding:9px 24px;border-radius:8px;border:none;cursor:pointer" onclick="salvarMetasGerente(${filialId},${mes},${ano})">💾 Salvar Distribuição</button></div>`;
-  Object.entries(grupos).forEach(([cat,itens])=>{
-    if(!itens.length)return;
-    html+=`<div class="chart-card" style="margin-bottom:16px"><div class="chart-title">${nomesCat[cat]}</div><div style="overflow-x:auto;margin-top:12px"><table style="width:100%;border-collapse:collapse;min-width:600px">
-    <thead><tr><th style="text-align:left;padding:8px;font-size:11px;color:var(--mid);border-bottom:1px solid var(--border)">Meta</th><th style="text-align:right;padding:8px;font-size:11px;color:var(--mid);border-bottom:1px solid var(--border)">Total Filial</th>
-    ${colabsVendas.map(c=>`<th style="text-align:right;padding:8px;font-size:10px;color:var(--mid);border-bottom:1px solid var(--border)">${c.nome.split(' ')[0]}</th>`).join('')}</tr></thead><tbody>`;
-    itens.forEach(m=>{
-      const tipoId=m.tipo_meta_id; const campId=m.campanha_id;
-      const nomeMeta=m.tipos_meta?.nome||m.campanhas?.nome||'—';
-      const unid=m.tipos_meta?.unidade==='percentual'?'%':m.tipos_meta?.unidade==='quantidade'?'un':'R$';
-      html+=`<tr><td style="padding:10px 8px;font-size:13px;border-bottom:1px solid var(--s2)">${nomeMeta}<br><small style="color:var(--light)">${unid}</small></td>
-        <td style="padding:10px 8px;font-size:13px;font-weight:700;text-align:right;border-bottom:1px solid var(--s2);color:var(--g0)">${unid} ${Number(m.valor||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</td>
-        ${colabsVendas.map(c=>`<td style="padding:6px 4px;border-bottom:1px solid var(--s2);text-align:right"><input type="number" data-colab="${c.id}" data-tipo="${tipoId||''}" data-camp="${campId||''}" value="${distMap[`${c.id}_${tipoId}_${campId}`]||0}" min="0" style="width:110px;padding:5px 8px;border-radius:8px;border:1.5px solid var(--border);font-size:12px;text-align:right;outline:none" onfocus="this.style.borderColor='var(--g3)'" onblur="this.style.borderColor='var(--border)'"/></td>`).join('')}</tr>`;
-    });
-    html+=`</tbody></table></div></div>`;
+  const filialId = parseInt(document.getElementById('ger-metas-filial')?.value || 0);
+  const mes = parseInt(document.getElementById('ger-metas-mes')?.value || 4);
+  const ano = parseInt(document.getElementById('ger-metas-ano')?.value || 2026);
+  const content = document.getElementById('ger-metas-content');
+  if(!content) return;
+  if(!filialId){
+    content.innerHTML = '<div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">Selecione uma filial para carregar a distribuição.</div>';
+    return;
+  }
+
+  content.innerHTML = '<div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">Carregando distribuição...</div>';
+
+  const filial = dadosFiliais.find(f=>f.id === filialId) || null;
+
+  const [colabsBaseResp, colabPeriodoResp, metasFilialResp, metasDistResp, campResp] = await Promise.all([
+    supa.from('colaboradores').select('id,nome,cargo,filial_id,filiais(codigo,nome)').eq('filial_id',filialId).eq('ativo',true).order('nome'),
+    supa.from('colaborador_filial')
+      .select('id,colaborador_id,filial_id,mes,ano,ativo,colaboradores(id,nome,cargo,filial_id,filiais(codigo,nome))')
+      .eq('filial_id',filialId).eq('mes',mes).eq('ano',ano),
+    supa.from('metas_filial')
+      .select('id,filial_id,tipo_meta_id,campanha_id,valor,tipos_meta(id,nome,codigo,categoria,unidade),campanhas(id,nome,codigo)')
+      .eq('filial_id',filialId).eq('mes',mes).eq('ano',ano),
+    supa.from('metas_colaborador')
+      .select('id,colaborador_id,filial_id,tipo_meta_id,campanha_id,valor')
+      .eq('filial_id',filialId).eq('mes',mes).eq('ano',ano),
+    supa.from('campanhas').select('*').order('data_inicio')
+  ]);
+
+  campanhasAtivas = campResp.data || campanhasAtivas || [];
+
+  const baseSales = (colabsBaseResp.data || []).filter(c=>CARGOS_VENDAS.includes(c.cargo));
+  const periodoRows = colabPeriodoResp.data || [];
+  const metasFilial = metasFilialResp.data || [];
+  const metasDistribuidas = metasDistResp.data || [];
+
+  const mapaPeriodo = new Map();
+  periodoRows.forEach(row=>{
+    if(row.colaboradores && CARGOS_VENDAS.includes(row.colaboradores.cargo)){
+      mapaPeriodo.set(row.colaborador_id, {
+        id: row.colaboradores.id,
+        nome: row.colaboradores.nome,
+        cargo: row.colaboradores.cargo,
+        filial_id: row.colaboradores.filial_id,
+        filial_rel_id: row.id,
+        origem: row.colaboradores.filial_id === filialId ? 'filial' : 'extra',
+        filial_codigo: row.colaboradores.filiais?.codigo || '',
+        filial_nome: row.colaboradores.filiais?.nome || '',
+        ativo_periodo: row.ativo
+      });
+    }
   });
-  content.innerHTML=html;
+
+  const excluidos = new Set(periodoRows.filter(r=>r.ativo === false).map(r=>r.colaborador_id));
+  const colaboradoresMap = new Map();
+
+  baseSales.forEach(c=>{
+    if(excluidos.has(c.id)) return;
+    colaboradoresMap.set(c.id, {
+      id: c.id,
+      nome: c.nome,
+      cargo: c.cargo,
+      filial_id: c.filial_id,
+      origem: 'filial',
+      filial_rel_id: mapaPeriodo.get(c.id)?.filial_rel_id || null,
+      filial_codigo: c.filiais?.codigo || filial?.codigo || '',
+      filial_nome: c.filiais?.nome || filial?.nome || '',
+      ativo_periodo: true
+    });
+  });
+
+  mapaPeriodo.forEach((c, id)=>{
+    if(c.ativo_periodo !== false){
+      colaboradoresMap.set(id, c);
+    }
+  });
+
+  const colaboradores = Array.from(colaboradoresMap.values()).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  const metaItems = metasFilial.map(m=>({
+    metaFilialId: m.id,
+    tipoId: m.tipo_meta_id || null,
+    campId: m.campanha_id || null,
+    nome: m.tipos_meta?.nome || m.campanhas?.nome || 'Meta',
+    codigo: m.tipos_meta?.codigo || m.campanhas?.codigo || '',
+    categoria: m.tipos_meta?.categoria || 'campanha',
+    unidadeTipo: m.tipos_meta?.unidade || (m.campanha_id ? 'valor' : 'valor'),
+    unidade: obterUnidadeMeta(m.tipos_meta?.unidade),
+    totalFilial: Number(m.valor || 0),
+    sortOrdem: m.tipos_meta?.ordem || 999
+  })).sort((a,b)=>{
+    const ordemCategoria = {principal:1, indicador:2, vitamina:3, campanha:4};
+    const catA = ordemCategoria[a.categoria] || 9;
+    const catB = ordemCategoria[b.categoria] || 9;
+    if(catA !== catB) return catA - catB;
+    if(a.sortOrdem !== b.sortOrdem) return a.sortOrdem - b.sortOrdem;
+    return a.nome.localeCompare(b.nome,'pt-BR');
+  });
+
+  const values = {};
+  const existingRows = {};
+  metasDistribuidas.forEach(row=>{
+    const chave = montarChaveMeta(row.colaborador_id, row.tipo_meta_id, row.campanha_id);
+    values[chave] = Number(row.valor || 0);
+    existingRows[chave] = {id: row.id};
+  });
+
+  colaboradores.forEach(col=>{
+    metaItems.forEach(item=>{
+      const chave = montarChaveMeta(col.id, item.tipoId, item.campId);
+      if(!(chave in values)) values[chave] = 0;
+    });
+  });
+
+  gerMetasState = {
+    ...gerMetasState,
+    filialId, mes, ano, filial,
+    colaboradores,
+    metasFilial,
+    metaItems,
+    values,
+    existingRows,
+    currentColabId: colaboradores[0]?.id || null,
+    importPreview: null
+  };
+
+  if(!metaItems.length){
+    content.innerHTML = '<div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">⚠️ O administrador ainda não definiu as metas desta filial para o período selecionado.</div>';
+    return;
+  }
+
+  renderizarWorkspaceMetasGerente();
 }
 
-async function salvarMetasGerente(filialId,mes,ano){
-  const inputs=document.querySelectorAll('#ger-metas-content input[type=number]');
-  const upserts=[];
-  inputs.forEach(inp=>{
-    const colabId=parseInt(inp.dataset.colab);
-    const tipoId=inp.dataset.tipo?parseInt(inp.dataset.tipo):null;
-    const campId=inp.dataset.camp?parseInt(inp.dataset.camp):null;
-    upserts.push({colaborador_id:colabId,filial_id:filialId,tipo_meta_id:tipoId,campanha_id:campId,mes,ano,valor:parseFloat(inp.value||0),criado_por:currentUser.id});
-  });
-  const {error}=await supa.from('metas_colaborador').upsert(upserts,{onConflict:'colaborador_id,filial_id,tipo_meta_id,mes,ano'});
-  if(error){showToast('❌ Erro: '+error.message);return;}
-  showToast('✅ Metas distribuídas!');
+function renderizarWorkspaceMetasGerente(){
+  const content = document.getElementById('ger-metas-content');
+  if(!content) return;
+
+  const temContexto = gerMetasState.filialId && gerMetasState.metaItems?.length;
+  if(!temContexto){
+    content.innerHTML = '<div class="chart-card" style="text-align:center;padding:32px;color:var(--light)">Selecione uma filial e clique em Carregar</div>';
+    return;
+  }
+
+  const manualActive = gerMetasState.aba === 'manual';
+  const importActive = gerMetasState.aba === 'import';
+
+  content.innerHTML = `
+    <div id="gm-view-manual" class="gm-view ${manualActive ? 'active' : ''}">${renderizarManualGerMetas()}</div>
+    <div id="gm-view-import" class="gm-view ${importActive ? 'active' : ''}">${renderizarImportacaoGerMetas()}</div>
+  `;
 }
+
+function renderizarManualGerMetas(){
+  const qtdColabs = gerMetasState.colaboradores.length;
+  const qtdItens = gerMetasState.metaItems.length;
+  const resumo = obterResumoDistribuicao();
+  const pendencias = resumo.filter(r=>Math.abs(r.saldo) > 0.009).length;
+
+  return `
+    <div class="gm-top-note">
+      <div style="font-size:18px;line-height:1">ℹ️</div>
+      <div><strong>Modo manual:</strong> selecione um colaborador na lista à esquerda para editar as metas individualmente. Você também pode incluir um colaborador extra no período ou remover alguém da distribuição atual.</div>
+    </div>
+
+    <div class="gm-summary-grid">
+      <div class="gm-summary-card">
+        <div class="gm-summary-label">Colaboradores no período</div>
+        <div class="gm-summary-value">${qtdColabs}</div>
+        <div class="gm-summary-sub">${gerMetasState.filial?.codigo || ''} — ${gerMetasState.filial?.nome || ''}</div>
+      </div>
+      <div class="gm-summary-card">
+        <div class="gm-summary-label">Metas para distribuir</div>
+        <div class="gm-summary-value">${qtdItens}</div>
+        <div class="gm-summary-sub">Principais, indicadores, vitaminas e campanhas</div>
+      </div>
+      <div class="gm-summary-card">
+        <div class="gm-summary-label">Pendências de rateio</div>
+        <div class="gm-summary-value">${pendencias}</div>
+        <div class="gm-summary-sub">Metas com saldo diferente de zero</div>
+      </div>
+    </div>
+
+    <div class="gm-layout">
+      <div class="gm-list-card">
+        <div class="gm-list-top">
+          <div>
+            <div class="chart-title">Colaboradores</div>
+            <div class="chart-sub">Clique para editar as metas</div>
+          </div>
+        </div>
+        <input id="gm-search-collab" class="gm-search" type="text" placeholder="🔍 Buscar colaborador..." oninput="renderizarWorkspaceMetasGerente()" value="${document.getElementById('gm-search-collab')?.value || ''}">
+        <div class="gm-collab-list">${renderizarListaColaboradoresGerMetas()}</div>
+      </div>
+      <div class="gm-editor-card">
+        ${renderizarEditorColaboradorGerMetas()}
+      </div>
+    </div>
+  `;
+}
+
+function renderizarListaColaboradoresGerMetas(){
+  const busca = normalizarTexto(document.getElementById('gm-search-collab')?.value || '');
+  const lista = (gerMetasState.colaboradores || []).filter(col=>{
+    if(!busca) return true;
+    const alvo = normalizarTexto(`${col.nome} ${col.cargo} ${col.filial_codigo || ''} ${col.filial_nome || ''}`);
+    return alvo.includes(busca);
+  });
+
+  if(!lista.length){
+    return '<div class="gm-editor-empty" style="min-height:180px">Nenhum colaborador encontrado para o filtro informado.</div>';
+  }
+
+  return lista.map(col=>{
+    const isActive = Number(gerMetasState.currentColabId) === Number(col.id);
+    const preenchidas = obterItensMetasOrdenados().filter(item=>obterValorMetaColaborador(col.id,item) > 0).length;
+    const ehExtra = col.origem === 'extra';
+    return `
+      <div class="gm-collab-item ${isActive ? 'active' : ''}" onclick="selecionarColaboradorGerMeta(${col.id})">
+        <div class="gm-collab-main">
+          <div class="gm-collab-name">${col.nome}</div>
+          <div class="gm-collab-meta">${col.cargo || '—'} · ${col.filial_codigo || gerMetasState.filial?.codigo || ''}${ehExtra ? ' · apoio/remanejamento' : ''}</div>
+          <div class="gm-collab-meta"><strong>${preenchidas}</strong> meta(s) preenchida(s)</div>
+        </div>
+        <div class="gm-item-actions">
+          <span class="gm-pill">${ehExtra ? 'Extra' : 'Filial'}</span>
+          <button class="gm-link-btn" onclick="event.stopPropagation();selecionarColaboradorGerMeta(${col.id})">Editar</button>
+          <button class="gm-link-btn danger" onclick="event.stopPropagation();removerColaboradorDistribuicao(${col.id})">Remover</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selecionarColaboradorGerMeta(colabId){
+  gerMetasState.currentColabId = colabId;
+  renderizarWorkspaceMetasGerente();
+}
+
+function atualizarValorMetaGerente(colabId, tipoId, campId, valor){
+  const chave = montarChaveMeta(colabId, tipoId, campId);
+  const numero = Number(String(valor || '').replace(',','.')) || 0;
+  gerMetasState.values[chave] = numero;
+  atualizarResumoEditorGerente();
+}
+
+function atualizarResumoEditorGerente(){
+  const alvo = document.getElementById('gm-resumo-editor');
+  if(alvo) alvo.innerHTML = renderizarResumoDistribuicaoTabela();
+}
+
+function renderizarEditorColaboradorGerMetas(){
+  const colaborador = gerMetasState.colaboradores.find(c=>Number(c.id) === Number(gerMetasState.currentColabId));
+  if(!colaborador){
+    return '<div class="gm-editor-empty">Selecione um colaborador na lista para editar as metas.</div>';
+  }
+
+  const grupos = {};
+  obterItensMetasOrdenados().forEach(item=>{
+    if(!grupos[item.categoria]) grupos[item.categoria] = [];
+    grupos[item.categoria].push(item);
+  });
+
+  const titulos = {
+    principal:'📊 Metas Principais',
+    indicador:'📈 Indicadores',
+    vitamina:'💊 Vitaminas',
+    campanha:'🏆 Campanhas'
+  };
+
+  return `
+    <div class="gm-editor-head">
+      <div>
+        <div class="gm-editor-title">${colaborador.nome}</div>
+        <div class="gm-editor-sub">${colaborador.cargo || '—'} · ${colaborador.filial_codigo || gerMetasState.filial?.codigo || ''}${colaborador.origem === 'extra' ? ' · colaborador incluído manualmente neste período' : ''}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn-outline" onclick="zerarMetasColaboradorSelecionado()">Limpar valores</button>
+        <button class="btn-primary" onclick="salvarMetasColaboradorSelecionado()">💾 Salvar colaborador</button>
+      </div>
+    </div>
+
+    <div class="gm-groups">
+      ${Object.entries(grupos).map(([categoria,itens])=>`
+        <div class="gm-group">
+          <div class="gm-group-head">
+            <span>${titulos[categoria] || categoria}</span>
+            <span>${itens.length} item(ns)</span>
+          </div>
+          <div class="gm-group-body">
+            ${itens.map(item=>`
+              <div class="gm-meta-row">
+                <div>
+                  <div class="gm-meta-name">${item.nome}</div>
+                  <div class="gm-meta-help">Unidade: ${item.unidade} · Valor total da filial para o período selecionado</div>
+                </div>
+                <div class="gm-total-filial">
+                  ${formatarNumeroMeta(item.totalFilial, item.unidade)}
+                  <small>Total filial</small>
+                </div>
+                <div>
+                  <input
+                    class="gm-input"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value="${obterValorMetaColaborador(colaborador.id, item)}"
+                    oninput="atualizarValorMetaGerente(${colaborador.id}, ${item.tipoId || 'null'}, ${item.campId || 'null'}, this.value)"
+                  />
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div id="gm-resumo-editor" class="gm-resumo-box">${renderizarResumoDistribuicaoTabela()}</div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn-outline" onclick="exportarModeloMetasExcel()">⬇️ Exportar modelo atual</button>
+      <button class="btn-primary" onclick="salvarMetasGerenteAtual()">💾 Salvar distribuição</button>
+    </div>
+  `;
+}
+
+function renderizarResumoDistribuicaoTabela(){
+  const resumo = obterResumoDistribuicao();
+  return `
+    <div class="gm-resumo-head">Resumo da distribuição da filial</div>
+    <table class="gm-resumo-table">
+      <thead>
+        <tr>
+          <th>Meta</th>
+          <th style="text-align:right">Total filial</th>
+          <th style="text-align:right">Distribuído</th>
+          <th style="text-align:right">Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${resumo.map(item=>{
+          const saldo = Number(item.saldo || 0);
+          const cls = Math.abs(saldo) <= 0.009 ? 'ok' : (saldo < 0 ? 'err' : 'warn');
+          return `
+            <tr>
+              <td>${item.nome}</td>
+              <td class="num">${formatarNumeroMeta(item.totalFilial, item.unidade)}</td>
+              <td class="num">${formatarNumeroMeta(item.distribuido, item.unidade)}</td>
+              <td class="num gm-balance ${cls}">${formatarNumeroMeta(saldo, item.unidade)}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function zerarMetasColaboradorSelecionado(){
+  if(!gerMetasState.currentColabId) return;
+  obterItensMetasOrdenados().forEach(item=>{
+    const chave = montarChaveMeta(gerMetasState.currentColabId, item.tipoId, item.campId);
+    gerMetasState.values[chave] = 0;
+  });
+  renderizarWorkspaceMetasGerente();
+}
+
+async function persistirMetasGerente(colabIds = null){
+  const ids = (colabIds && colabIds.length) ? colabIds.map(Number) : (gerMetasState.colaboradores || []).map(c=>Number(c.id));
+  if(!ids.length){
+    showToast('⚠️ Nenhum colaborador para salvar.');
+    return false;
+  }
+
+  const rows = [];
+  ids.forEach(colabId=>{
+    obterItensMetasOrdenados().forEach(item=>{
+      const chave = montarChaveMeta(colabId, item.tipoId, item.campId);
+      const existing = gerMetasState.existingRows[chave];
+      rows.push({
+        ...(existing?.id ? {id: existing.id} : {}),
+        colaborador_id: colabId,
+        filial_id: gerMetasState.filialId,
+        tipo_meta_id: item.tipoId,
+        campanha_id: item.campId,
+        mes: gerMetasState.mes,
+        ano: gerMetasState.ano,
+        valor: Number(gerMetasState.values[chave] || 0),
+        criado_por: currentUser.id
+      });
+    });
+  });
+
+  const {error} = await supa.from('metas_colaborador').upsert(rows);
+  if(error){
+    showToast('❌ Erro ao salvar: ' + error.message);
+    return false;
+  }
+  return true;
+}
+
+async function salvarMetasColaboradorSelecionado(){
+  if(!gerMetasState.currentColabId){
+    showToast('⚠️ Selecione um colaborador.');
+    return;
+  }
+  const ok = await persistirMetasGerente([gerMetasState.currentColabId]);
+  if(ok){
+    showToast('✅ Metas do colaborador salvas!');
+    await carregarMetasGerente();
+  }
+}
+
+async function salvarMetasGerenteAtual(){
+  const ok = await persistirMetasGerente();
+  if(ok){
+    showToast('✅ Distribuição salva com sucesso!');
+    await carregarMetasGerente();
+  }
+}
+
+async function abrirModalAdicionarDistribuicao(){
+  if(!gerMetasState.filialId){
+    showToast('⚠️ Selecione a filial e carregue o período antes de incluir colaboradores.');
+    return;
+  }
+
+  const select = document.getElementById('dist-colab-select');
+  const erroEl = document.getElementById('dist-colab-erro');
+  if(!select) return;
+  erroEl.style.display = 'none';
+  select.innerHTML = '<option value="">Carregando...</option>';
+
+  const idsJaUsados = new Set((gerMetasState.colaboradores || []).map(c=>Number(c.id)));
+  const {data, error} = await supa
+    .from('colaboradores')
+    .select('id,nome,cargo,filial_id,filiais(codigo,nome)')
+    .eq('ativo',true)
+    .order('nome');
+
+  if(error){
+    showToast('❌ Não foi possível carregar os colaboradores.');
+    return;
+  }
+
+  const disponiveis = (data || [])
+    .filter(c=>CARGOS_VENDAS.includes(c.cargo))
+    .filter(c=>!idsJaUsados.has(Number(c.id)));
+
+  if(!disponiveis.length){
+    select.innerHTML = '<option value="">Nenhum colaborador disponível</option>';
+  } else {
+    select.innerHTML = '<option value="">Selecione...</option>' + disponiveis.map(c=>{
+      const codigo = c.filiais?.codigo ? `${c.filiais.codigo} — ` : '';
+      return `<option value="${c.id}">${c.nome} · ${c.cargo} · ${codigo}${c.filiais?.nome || 'Sem filial'}</option>`;
+    }).join('');
+  }
+
+  document.getElementById('modal-dist-colab').style.display = 'flex';
+}
+
+function fecharModalAdicionarDistribuicao(){
+  document.getElementById('modal-dist-colab').style.display = 'none';
+}
+
+async function salvarColaboradorDistribuicao(){
+  const colabId = parseInt(document.getElementById('dist-colab-select')?.value || 0);
+  const erroEl = document.getElementById('dist-colab-erro');
+  erroEl.style.display = 'none';
+
+  if(!colabId){
+    erroEl.textContent = '❌ Selecione um colaborador.';
+    erroEl.style.display = 'block';
+    return;
+  }
+
+  const {data:existente} = await supa
+    .from('colaborador_filial')
+    .select('id')
+    .eq('colaborador_id', colabId)
+    .eq('filial_id', gerMetasState.filialId)
+    .eq('mes', gerMetasState.mes)
+    .eq('ano', gerMetasState.ano)
+    .limit(1)
+    .maybeSingle();
+
+  let error;
+  if(existente?.id){
+    ({error} = await supa.from('colaborador_filial').update({ativo:true, criado_por: currentUser.id}).eq('id', existente.id));
+  } else {
+    ({error} = await supa.from('colaborador_filial').insert({
+      colaborador_id: colabId,
+      filial_id: gerMetasState.filialId,
+      mes: gerMetasState.mes,
+      ano: gerMetasState.ano,
+      ativo: true,
+      criado_por: currentUser.id
+    }));
+  }
+
+  if(error){
+    erroEl.textContent = '❌ ' + error.message;
+    erroEl.style.display = 'block';
+    return;
+  }
+
+  fecharModalAdicionarDistribuicao();
+  showToast('✅ Colaborador incluído na distribuição!');
+  await carregarMetasGerente();
+}
+
+async function removerColaboradorDistribuicao(colabId){
+  if(!gerMetasState.filialId) return;
+  const {data:existente} = await supa
+    .from('colaborador_filial')
+    .select('id')
+    .eq('colaborador_id', colabId)
+    .eq('filial_id', gerMetasState.filialId)
+    .eq('mes', gerMetasState.mes)
+    .eq('ano', gerMetasState.ano)
+    .limit(1)
+    .maybeSingle();
+
+  let error;
+  if(existente?.id){
+    ({error} = await supa.from('colaborador_filial').update({ativo:false}).eq('id', existente.id));
+  } else {
+    ({error} = await supa.from('colaborador_filial').insert({
+      colaborador_id: colabId,
+      filial_id: gerMetasState.filialId,
+      mes: gerMetasState.mes,
+      ano: gerMetasState.ano,
+      ativo: false,
+      criado_por: currentUser.id
+    }));
+  }
+
+  if(error){
+    showToast('❌ Não foi possível remover o colaborador deste período.');
+    return;
+  }
+
+  showToast('🗑️ Colaborador removido da distribuição do período.');
+  await carregarMetasGerente();
+}
+
+function renderizarImportacaoGerMetas(){
+  const preview = gerMetasState.importPreview;
+  return `
+    <div class="gm-import-card">
+      <div class="chart-title">Importação em lote por planilha</div>
+      <div class="chart-sub">Baixe o modelo, preencha as metas por colaborador e depois importe o arquivo para gravar tudo de uma vez.</div>
+
+      <div class="gm-top-note">
+        <div style="font-size:18px;line-height:1">📄</div>
+        <div>
+          <strong>Como usar:</strong>
+          <ul>
+            <li>clique em <strong>Exportar modelo Excel</strong> para baixar a planilha do período selecionado;</li>
+            <li>preencha apenas as colunas das metas;</li>
+            <li>não altere as colunas de identificação do colaborador, filial, mês e ano;</li>
+            <li>depois clique em <strong>Importar planilha</strong> para validar e gravar.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gm-drop">
+        <strong>Importação alternativa</strong>
+        Arraste ou selecione uma planilha preenchida (.xlsx, .xls ou .csv) para validar os dados deste período.
+        <div style="margin-top:14px">
+          <button class="btn-primary" onclick="document.getElementById('ger-metas-file').click()">Selecionar arquivo</button>
+        </div>
+      </div>
+
+      ${preview ? renderizarPreviewImportacaoGerMetas(preview) : `
+        <div class="gm-preview">
+          <div class="gm-small">Nenhuma planilha validada ainda. Depois de selecionar o arquivo, o sistema exibirá a prévia da importação antes da gravação.</div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function renderizarPreviewImportacaoGerMetas(preview){
+  return `
+    <div class="gm-preview">
+      <div class="chart-title">Prévia da importação</div>
+      <div class="chart-sub">Confira o resumo antes de confirmar a gravação.</div>
+
+      <div class="gm-preview-grid">
+        <div class="gm-preview-card"><div class="v">${preview.totalLinhas}</div><div class="l">Linhas válidas</div></div>
+        <div class="gm-preview-card"><div class="v">${preview.totalColaboradores}</div><div class="l">Colaboradores</div></div>
+        <div class="gm-preview-card"><div class="v">${preview.totalMetas}</div><div class="l">Registros de meta</div></div>
+      </div>
+
+      ${preview.alertas?.length ? `<div class="gm-import-errors">${preview.alertas.join('<br>')}</div>` : `<div class="gm-import-ok">Arquivo validado com sucesso para ${gerMetasState.filial?.codigo || ''} · ${gerMetasState.mes}/${gerMetasState.ano}.</div>`}
+
+      <div class="gm-small" style="margin-top:12px">
+        Cabeçalhos reconhecidos: ${preview.camposReconhecidos.join(', ') || 'nenhum'}.
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;flex-wrap:wrap">
+        <button class="btn-outline" onclick="limparPreviewImportacaoGerMetas()">Limpar prévia</button>
+        <button class="btn-primary" onclick="confirmarImportacaoMetas()">✅ Confirmar importação</button>
+      </div>
+    </div>
+  `;
+}
+
+function limparPreviewImportacaoGerMetas(){
+  gerMetasState.importPreview = null;
+  trocarAbaGerMetas('import');
+}
+
+function obterMapaCamposExportacao(){
+  return obterItensMetasOrdenados().map(item=>({
+    campo: item.nome,
+    tipo: item.tipoId ? 'tipo_meta' : 'campanha',
+    id: item.tipoId || item.campId,
+    tipoId: item.tipoId || null,
+    campId: item.campId || null,
+    nome: item.nome,
+    categoria: item.categoria,
+    unidade: item.unidade,
+    total_filial: item.totalFilial
+  }));
+}
+
+function exportarModeloMetasExcel(){
+  if(typeof XLSX === 'undefined'){
+    showToast('❌ Biblioteca de Excel indisponível.');
+    return;
+  }
+  if(!gerMetasState.filialId || !gerMetasState.metaItems?.length){
+    showToast('⚠️ Carregue a filial e o período antes de exportar.');
+    return;
+  }
+
+  const camposMeta = obterMapaCamposExportacao();
+  const headersFixos = ['filial_id','filial_codigo','filial_nome','mes','ano','colaborador_id','colaborador_nome','cargo'];
+  const headersMetas = camposMeta.map(c=>c.campo);
+  const rows = (gerMetasState.colaboradores || []).map(col=>{
+    const row = {
+      filial_id: gerMetasState.filialId,
+      filial_codigo: gerMetasState.filial?.codigo || '',
+      filial_nome: gerMetasState.filial?.nome || '',
+      mes: gerMetasState.mes,
+      ano: gerMetasState.ano,
+      colaborador_id: col.id,
+      colaborador_nome: col.nome,
+      cargo: col.cargo || ''
+    };
+    camposMeta.forEach(item=>{
+      row[item.campo] = obterValorMetaColaborador(col.id, item);
+    });
+    return row;
+  });
+
+  const wsDist = XLSX.utils.json_to_sheet(rows, {header:[...headersFixos, ...headersMetas]});
+  wsDist['!cols'] = [
+    {wch:10},{wch:14},{wch:28},{wch:8},{wch:8},{wch:14},{wch:30},{wch:22},
+    ...headersMetas.map(()=>({wch:18}))
+  ];
+
+  const instrucoes = [
+    ['Mercadão+ Portal — Modelo de distribuição de metas'],
+    [''],
+    ['Como preencher'],
+    ['1. Não altere as colunas: filial_id, filial_codigo, filial_nome, mes, ano, colaborador_id, colaborador_nome e cargo.'],
+    ['2. Preencha apenas as colunas das metas.'],
+    ['3. Você pode deixar zero quando não houver meta para o colaborador.'],
+    ['4. Depois volte ao portal e importe o arquivo na aba "Importar Planilha".'],
+    [''],
+    ['Filial', `${gerMetasState.filial?.codigo || ''} — ${gerMetasState.filial?.nome || ''}`],
+    ['Período', `${gerMetasState.mes}/${gerMetasState.ano}`],
+    ['Colaboradores no arquivo', String((gerMetasState.colaboradores || []).length)]
+  ];
+  const wsInfo = XLSX.utils.aoa_to_sheet(instrucoes);
+  wsInfo['!cols'] = [{wch:28},{wch:50}];
+
+  const wsMap = XLSX.utils.json_to_sheet(camposMeta);
+  wsMap['!cols'] = [{wch:28},{wch:16},{wch:10},{wch:28},{wch:16},{wch:10},{wch:16}];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, wsInfo, 'Instrucoes');
+  XLSX.utils.book_append_sheet(wb, wsDist, 'Distribuicao');
+  XLSX.utils.book_append_sheet(wb, wsMap, 'Mapeamento');
+
+  const nomeArquivo = `modelo_distribuicao_${gerMetasState.filial?.codigo || 'filial'}_${gerMetasState.mes}_${gerMetasState.ano}.xlsx`;
+  XLSX.writeFile(wb, nomeArquivo);
+  showToast('📥 Modelo Excel exportado!');
+}
+
+async function lerArquivoImportacaoMetas(event){
+  if(!gerMetasState.filialId || !gerMetasState.metaItems?.length){
+    showToast('⚠️ Carregue a filial e o período antes de importar.');
+    event.target.value = '';
+    return;
+  }
+  const file = event.target.files?.[0];
+  if(!file) return;
+  if(typeof XLSX === 'undefined'){
+    showToast('❌ Biblioteca de Excel indisponível.');
+    event.target.value = '';
+    return;
+  }
+
+  try{
+    const data = await file.arrayBuffer();
+    const workbook = XLSX.read(data, {type:'array'});
+    const sheetName = workbook.SheetNames.includes('Distribuicao') ? 'Distribuicao' : workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, {defval:''});
+
+    const mapSheetName = workbook.SheetNames.includes('Mapeamento') ? 'Mapeamento' : null;
+    const mapRows = mapSheetName ? XLSX.utils.sheet_to_json(workbook.Sheets[mapSheetName], {defval:''}) : [];
+    const mapaCampos = {};
+    mapRows.forEach(r=>{
+      const campo = String(r.campo || '').trim();
+      if(campo){
+        mapaCampos[campo] = {
+          tipo: r.tipo,
+          id: Number(r.id || 0),
+          nome: r.nome || campo
+        };
+      }
+    });
+
+    const metaItems = obterItensMetasOrdenados();
+    const mapaInferido = {};
+    metaItems.forEach(item=>{
+      mapaInferido[normalizarTexto(item.nome)] = item;
+    });
+
+    const camposFixos = ['filial_id','filial_codigo','filial_nome','mes','ano','colaborador_id','colaborador_nome','cargo'];
+    const cabecalhos = rows[0] ? Object.keys(rows[0]) : [];
+    const camposReconhecidos = [];
+    const alertas = [];
+    const payloads = [];
+    const collaboratorIds = new Set();
+
+    if(!rows.length){
+      gerMetasState.importPreview = {
+        totalLinhas: 0, totalColaboradores: 0, totalMetas: 0,
+        camposReconhecidos: [], alertas:['Nenhuma linha encontrada na planilha.'],
+        payloads: [], collaboratorIds:[]
+      };
+      trocarAbaGerMetas('import');
+      renderizarWorkspaceMetasGerente();
+      event.target.value = '';
+      return;
+    }
+
+    const contextMismatch = rows.some(row=>{
+      const filialArq = Number(row.filial_id || gerMetasState.filialId);
+      const mesArq = Number(row.mes || gerMetasState.mes);
+      const anoArq = Number(row.ano || gerMetasState.ano);
+      return filialArq !== Number(gerMetasState.filialId) || mesArq !== Number(gerMetasState.mes) || anoArq !== Number(gerMetasState.ano);
+    });
+    if(contextMismatch){
+      gerMetasState.importPreview = {
+        totalLinhas: 0, totalColaboradores: 0, totalMetas: 0,
+        camposReconhecidos: [],
+        alertas:['O arquivo pertence a uma filial ou período diferente do atualmente selecionado.'],
+        payloads: [], collaboratorIds:[]
+      };
+      trocarAbaGerMetas('import');
+      renderizarWorkspaceMetasGerente();
+      event.target.value = '';
+      return;
+    }
+
+    rows.forEach((row, idx)=>{
+      const colaboradorId = Number(row.colaborador_id || 0);
+      if(!colaboradorId){
+        alertas.push(`Linha ${idx + 2}: colaborador_id inválido.`);
+        return;
+      }
+      collaboratorIds.add(colaboradorId);
+
+      cabecalhos.forEach(header=>{
+        if(camposFixos.includes(header)) return;
+
+        let item = null;
+        if(mapaCampos[header]){
+          const metaMap = mapaCampos[header];
+          item = metaItems.find(m => (metaMap.tipo === 'tipo_meta' && Number(m.tipoId) === Number(metaMap.id)) || (metaMap.tipo === 'campanha' && Number(m.campId) === Number(metaMap.id)));
+        }
+        if(!item){
+          item = mapaInferido[normalizarTexto(header)] || null;
+        }
+        if(!item) return;
+
+        if(!camposReconhecidos.includes(header)) camposReconhecidos.push(header);
+
+        const valorBruto = row[header];
+        const valor = parseValorPlanilha(valorBruto);
+
+        payloads.push({
+          colaborador_id: colaboradorId,
+          filial_id: gerMetasState.filialId,
+          tipo_meta_id: item.tipoId,
+          campanha_id: item.campId,
+          mes: gerMetasState.mes,
+          ano: gerMetasState.ano,
+          valor,
+          criado_por: currentUser.id
+        });
+      });
+    });
+
+    const metasEsperadas = metaItems.length;
+    if(camposReconhecidos.length < metasEsperadas){
+      alertas.push(`Foram reconhecidas ${camposReconhecidos.length} coluna(s) de meta, mas o período possui ${metasEsperadas} item(ns) disponíveis.`);
+    }
+
+    gerMetasState.importPreview = {
+      totalLinhas: rows.length,
+      totalColaboradores: collaboratorIds.size,
+      totalMetas: payloads.length,
+      camposReconhecidos,
+      alertas,
+      payloads,
+      collaboratorIds: Array.from(collaboratorIds)
+    };
+
+    trocarAbaGerMetas('import');
+    renderizarWorkspaceMetasGerente();
+
+  } catch(err){
+    console.error(err);
+    showToast('❌ Não foi possível ler a planilha.');
+  } finally {
+    event.target.value = '';
+  }
+}
+
+async function garantirVinculoColaboradorPeriodo(colabId, ativo = true){
+  const {data:existente} = await supa
+    .from('colaborador_filial')
+    .select('id')
+    .eq('colaborador_id', colabId)
+    .eq('filial_id', gerMetasState.filialId)
+    .eq('mes', gerMetasState.mes)
+    .eq('ano', gerMetasState.ano)
+    .limit(1)
+    .maybeSingle();
+
+  if(existente?.id){
+    return supa.from('colaborador_filial').update({ativo}).eq('id', existente.id);
+  }
+  return supa.from('colaborador_filial').insert({
+    colaborador_id: colabId,
+    filial_id: gerMetasState.filialId,
+    mes: gerMetasState.mes,
+    ano: gerMetasState.ano,
+    ativo,
+    criado_por: currentUser.id
+  });
+}
+
+async function confirmarImportacaoMetas(){
+  const preview = gerMetasState.importPreview;
+  if(!preview?.payloads?.length){
+    showToast('⚠️ Nenhuma importação validada.');
+    return;
+  }
+  if(preview.alertas?.length){
+    showToast('⚠️ Revise os alertas antes de confirmar.');
+  }
+
+  for(const colabId of preview.collaboratorIds){
+    const {error: vincError} = await garantirVinculoColaboradorPeriodo(colabId, true);
+    if(vincError){
+      showToast('❌ Erro ao vincular colaboradores ao período.');
+      return;
+    }
+  }
+
+  const rows = preview.payloads.map(p=>{
+    const chave = montarChaveMeta(p.colaborador_id, p.tipo_meta_id, p.campanha_id);
+    const existing = gerMetasState.existingRows[chave];
+    return {
+      ...(existing?.id ? {id: existing.id} : {}),
+      ...p
+    };
+  });
+
+  const {error} = await supa.from('metas_colaborador').upsert(rows);
+  if(error){
+    showToast('❌ Erro ao importar: ' + error.message);
+    return;
+  }
+
+  showToast('✅ Planilha importada com sucesso!');
+  gerMetasState.importPreview = null;
+  await carregarMetasGerente();
+  trocarAbaGerMetas('manual');
+}
+
+document.getElementById('modal-dist-colab')?.addEventListener('click', function(e){
+  if(e.target === this) fecharModalAdicionarDistribuicao();
+});
 
 // ══ METAS — COLABORADOR ══
 async function carregarMetasColaborador(){
