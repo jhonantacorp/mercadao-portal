@@ -949,19 +949,30 @@ async function doLogin(){
   btn.textContent='Entrando...';btn.disabled=true;
 
   try{
-    // Usar limit(1) em vez de single() para evitar erro 406
-    const {data:results, error}=await supa
-      .from('colaboradores')
-      .select('id,nome,login,senha_hash,cargo,perfil,filial_id,ativo')
-      .eq('login', u)
-      .limit(1);
+    // Usar fetch direto na REST API do Supabase (bypass da biblioteca JS)
+    const resp = await fetch(
+      `${SUPA_URL}/rest/v1/colaboradores?select=id,nome,login,senha_hash,cargo,perfil,filial_id,ativo&login=eq.${encodeURIComponent(u)}&limit=1`,
+      { headers: {
+          'apikey': SUPA_KEY,
+          'Authorization': `Bearer ${SUPA_KEY}`,
+          'Content-Type': 'application/json'
+      }}
+    );
 
+    if(!resp.ok){
+      const txt = await resp.text();
+      errEl.style.display='block';
+      errEl.textContent=`❌ Erro ${resp.status}: ${txt}`;
+      console.error('Fetch error:', resp.status, txt);
+      btn.textContent='Entrar';btn.disabled=false;return;
+    }
+
+    const results = await resp.json();
     const data = results?.[0] || null;
 
-    if(error || !data){
+    if(!data){
       errEl.style.display='block';
-      errEl.textContent='❌ Usuário não encontrado. '+(error?.message||'');
-      console.error('Login error:', JSON.stringify(error));
+      errEl.textContent='❌ Usuário não encontrado.';
       btn.textContent='Entrar';btn.disabled=false;return;
     }
     if(!data.ativo){
@@ -974,11 +985,15 @@ async function doLogin(){
     }
     errEl.style.display='none';
 
-    // Buscar dados da filial separadamente
+    // Buscar filial separadamente
     let filialData = null;
     if(data.filial_id){
-      const {data:fd} = await supa.from('filiais').select('id,codigo,nome,bandeira_id').eq('id',data.filial_id).limit(1);
-      filialData = fd?.[0] || null;
+      const fr = await fetch(
+        `${SUPA_URL}/rest/v1/filiais?select=id,codigo,nome,bandeira_id&id=eq.${data.filial_id}&limit=1`,
+        { headers:{ 'apikey':SUPA_KEY, 'Authorization':`Bearer ${SUPA_KEY}` }}
+      );
+      const frs = await fr.json();
+      filialData = frs?.[0]||null;
     }
 
     const perfil=data.perfil;
@@ -1024,14 +1039,15 @@ async function doLogin(){
 
 async function carregarDados(){
   try{
-    const [f,c,k]=await Promise.all([
-      supa.from('filiais').select('id,codigo,nome,cidade,bandeira_id').order('codigo'),
-      supa.from('colaboradores').select('id,nome,cargo,filial_id,perfil').eq('ativo',true).order('nome'),
-      supa.from('kpis').select('id,colaborador_id,filial_id,mes,ano,vendas_valor,score').order('score',{ascending:false}),
+    const h={'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`};
+    const [fr,cr,kr]=await Promise.all([
+      fetch(`${SUPA_URL}/rest/v1/filiais?select=id,codigo,nome,cidade,bandeira_id&order=codigo`,{headers:h}),
+      fetch(`${SUPA_URL}/rest/v1/colaboradores?select=id,nome,cargo,filial_id,perfil&ativo=eq.true&order=nome`,{headers:h}),
+      fetch(`${SUPA_URL}/rest/v1/kpis?select=id,colaborador_id,filial_id,mes,ano,vendas_valor,score&order=score.desc`,{headers:h}),
     ]);
-    dadosFiliais=f.data||[];
-    dadosColaboradores=c.data||[];
-    dadosKpis=k.data||[];
+    dadosFiliais   = fr.ok ? await fr.json() : [];
+    dadosColaboradores = cr.ok ? await cr.json() : [];
+    dadosKpis      = kr.ok ? await kr.json() : [];
     renderizarFiliais();
     renderizarRankingGeral();
     renderizarKpisColaborador();
