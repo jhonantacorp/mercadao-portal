@@ -949,18 +949,23 @@ async function doLogin(){
   btn.textContent='Entrando...';btn.disabled=true;
 
   try{
-    // Query simples sem joins aninhados para evitar erro 406
-    const {data,error}=await supa
+    // Usar limit(1) em vez de single() para evitar erro 406
+    const {data:results, error}=await supa
       .from('colaboradores')
-      .select('id, nome, login, senha_hash, cargo, perfil, filial_id, ativo')
-      .eq('login',u)
-      .eq('ativo',true)
-      .single();
+      .select('id,nome,login,senha_hash,cargo,perfil,filial_id,ativo')
+      .eq('login', u)
+      .limit(1);
 
-    if(error||!data){
+    const data = results?.[0] || null;
+
+    if(error || !data){
       errEl.style.display='block';
-      errEl.textContent='❌ Usuário não encontrado. '+(error?.message||error?.details||'');
+      errEl.textContent='❌ Usuário não encontrado. '+(error?.message||'');
       console.error('Login error:', JSON.stringify(error));
+      btn.textContent='Entrar';btn.disabled=false;return;
+    }
+    if(!data.ativo){
+      errEl.style.display='block';errEl.textContent='❌ Usuário inativo.';
       btn.textContent='Entrar';btn.disabled=false;return;
     }
     if(data.senha_hash!==p){
@@ -972,21 +977,24 @@ async function doLogin(){
     // Buscar dados da filial separadamente
     let filialData = null;
     if(data.filial_id){
-      const {data:fd} = await supa.from('filiais').select('id,codigo,nome,bandeira_id').eq('id',data.filial_id).single();
-      filialData = fd;
+      const {data:fd} = await supa.from('filiais').select('id,codigo,nome,bandeira_id').eq('id',data.filial_id).limit(1);
+      filialData = fd?.[0] || null;
     }
 
     const perfil=data.perfil;
     const cfg=PERFIL_CONFIG[perfil]||PERFIL_CONFIG.colaborador;
     const iniciais=(data.nome||'?').split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase();
 
-    // Para gerente: buscar filiais vinculadas
     filiaisGerente=[];
     if(perfil==='gerente'){
       const {data:gf}=await supa.from('gerente_filial')
-        .select('filial_id, filiais(id,codigo,nome,bandeira_id)')
+        .select('filial_id')
         .eq('colaborador_id',data.id);
-      filiaisGerente=(gf||[]).map(g=>g.filiais);
+      if(gf?.length){
+        const filialIds=gf.map(g=>g.filial_id);
+        const {data:fds}=await supa.from('filiais').select('id,codigo,nome,bandeira_id').in('id',filialIds);
+        filiaisGerente=fds||[];
+      }
     }
 
     const filialNome = perfil==='gerente'
