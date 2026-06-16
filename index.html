@@ -874,7 +874,7 @@ tr:hover td{background:var(--s2);}
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.68.0"></script>
 <script>
 // ══ SUPABASE ══
 const SUPA_URL = 'https://irnqlnchtjtnwpnygbqq.supabase.co';
@@ -955,7 +955,9 @@ async function doLogin(){
       .eq('login',u).eq('ativo',true).single();
 
     if(error||!data){
-      errEl.style.display='block';errEl.textContent='❌ Usuário não encontrado.';
+      errEl.style.display='block';
+      errEl.textContent='❌ Usuário não encontrado. '+(error?.message||error?.details||'');
+      console.error('Login error:', JSON.stringify(error));
       btn.textContent='Entrar';btn.disabled=false;return;
     }
     if(data.senha_hash!==p){
