@@ -874,12 +874,82 @@ tr:hover td{background:var(--s2);}
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.68.0"></script>
 <script>
 // ══ SUPABASE ══
 const SUPA_URL = 'https://irnqlnchtjtnwpnygbqq.supabase.co';
 const SUPA_KEY = 'sb_publishable_9d0HDzCuU8sERLIHcxA1Uw_Nd62W8Br';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+const H = {
+  'apikey': SUPA_KEY,
+  'Authorization': `Bearer ${SUPA_KEY}`,
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+};
+
+// Cliente REST mínimo — substitui o supabase-js
+const supa = {
+  from(table){
+    const q = {
+      _t: table, _sel:'*', _filters:[], _ord:null, _lim:null, _sing:false,
+      select(c){this._sel=c;return this;},
+      eq(c,v){this._filters.push(`${c}=eq.${encodeURIComponent(v)}`);return this;},
+      neq(c,v){this._filters.push(`${c}=neq.${encodeURIComponent(v)}`);return this;},
+      in(c,vs){this._filters.push(`${c}=in.(${vs.map(v=>encodeURIComponent(v)).join(',')})`);return this;},
+      order(c,o={}){this._ord=`${c}.${o.ascending===false?'desc':'asc'}`;return this;},
+      limit(n){this._lim=n;return this;},
+      single(){this._lim=1;this._sing=true;return this;},
+      async _run(){
+        let url=`${SUPA_URL}/rest/v1/${this._t}?select=${this._sel}`;
+        this._filters.forEach(f=>url+=`&${f}`);
+        if(this._ord)url+=`&order=${this._ord}`;
+        if(this._lim)url+=`&limit=${this._lim}`;
+        const r=await fetch(url,{headers:H});
+        const d=await r.json();
+        if(!r.ok)return{data:null,error:d};
+        if(this._sing)return{data:Array.isArray(d)?d[0]||null:d,error:null};
+        return{data:d,error:null};
+      },
+      then(res,rej){return this._run().then(res,rej);}
+    };
+    q.upsert=async(rows,opts={})=>{
+      const oc=opts.onConflict?`?on_conflict=${opts.onConflict}`:'';
+      const r=await fetch(`${SUPA_URL}/rest/v1/${table}${oc}`,{
+        method:'POST',headers:{...H,'Prefer':'resolution=merge-duplicates,return=minimal'},
+        body:JSON.stringify(Array.isArray(rows)?rows:[rows])
+      });
+      if(!r.ok){const e=await r.json();return{data:null,error:e};}
+      return{data:null,error:null};
+    };
+    q.insert=async(rows)=>{
+      const r=await fetch(`${SUPA_URL}/rest/v1/${table}`,{
+        method:'POST',headers:{...H,'Prefer':'return=minimal'},
+        body:JSON.stringify(Array.isArray(rows)?rows:[rows])
+      });
+      if(!r.ok){const e=await r.json();return{data:null,error:e};}
+      return{data:null,error:null};
+    };
+    q.update=(vals)=>{
+      const upd={
+        _vals:vals,
+        eq(c,v){
+          const self=this;
+          return{
+            async _run(){
+              const r=await fetch(`${SUPA_URL}/rest/v1/${table}?${c}=eq.${encodeURIComponent(v)}`,{
+                method:'PATCH',headers:{...H,'Prefer':'return=minimal'},
+                body:JSON.stringify(self._vals)
+              });
+              if(!r.ok){const e=await r.json();return{data:null,error:e};}
+              return{data:null,error:null};
+            },
+            then(res,rej){return this._run().then(res,rej);}
+          };
+        }
+      };
+      return upd;
+    };
+    return q;
+  }
+};
 
 // Configuração visual por perfil
 const PERFIL_CONFIG = {
@@ -949,14 +1019,17 @@ async function doLogin(){
   btn.textContent='Entrando...';btn.disabled=true;
 
   try{
+    const HEADERS = {
+      'apikey': SUPA_KEY,
+      'Authorization': `Bearer ${SUPA_KEY}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+
     // Usar fetch direto na REST API do Supabase (bypass da biblioteca JS)
     const resp = await fetch(
       `${SUPA_URL}/rest/v1/colaboradores?select=id,nome,login,senha_hash,cargo,perfil,filial_id,ativo&login=eq.${encodeURIComponent(u)}&limit=1`,
-      { headers: {
-          'apikey': SUPA_KEY,
-          'Authorization': `Bearer ${SUPA_KEY}`,
-          'Content-Type': 'application/json'
-      }}
+      { headers: HEADERS }
     );
 
     if(!resp.ok){
@@ -990,7 +1063,7 @@ async function doLogin(){
     if(data.filial_id){
       const fr = await fetch(
         `${SUPA_URL}/rest/v1/filiais?select=id,codigo,nome,bandeira_id&id=eq.${data.filial_id}&limit=1`,
-        { headers:{ 'apikey':SUPA_KEY, 'Authorization':`Bearer ${SUPA_KEY}` }}
+        { headers: HEADERS }
       );
       const frs = await fr.json();
       filialData = frs?.[0]||null;
@@ -1040,7 +1113,11 @@ async function doLogin(){
 
 async function carregarDados(){
   try{
-    const h={'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`};
+    const h={
+      'apikey':SUPA_KEY,
+      'Authorization':`Bearer ${SUPA_KEY}`,
+      'Accept':'application/json'
+    };
     const [fr,cr,kr]=await Promise.all([
       fetch(`${SUPA_URL}/rest/v1/filiais?select=id,codigo,nome,cidade,bandeira_id&order=codigo`,{headers:h}),
       fetch(`${SUPA_URL}/rest/v1/colaboradores?select=id,nome,cargo,filial_id,perfil&ativo=eq.true&order=nome`,{headers:h}),
