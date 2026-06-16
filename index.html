@@ -1031,8 +1031,9 @@ async function doLogin(){
     navigateTo(NAVS[perfil]?.[0]?.page||'col-dash');
 
   }catch(e){
-    errEl.style.display='block';errEl.textContent='❌ Erro de conexão. Tente novamente.';
-    console.error(e);
+    errEl.style.display='block';
+    errEl.textContent='❌ Erro: '+( e?.message || String(e));
+    console.error('Catch error:', e);
   }
   btn.textContent='Entrar';btn.disabled=false;
 }
