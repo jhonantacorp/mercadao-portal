@@ -949,10 +949,13 @@ async function doLogin(){
   btn.textContent='Entrando...';btn.disabled=true;
 
   try{
+    // Query simples sem joins aninhados para evitar erro 406
     const {data,error}=await supa
       .from('colaboradores')
-      .select('*, filiais(codigo,nome,bandeira_id, bandeiras(nome,cor_primaria))')
-      .eq('login',u).eq('ativo',true).single();
+      .select('id, nome, login, senha_hash, cargo, perfil, filial_id, ativo')
+      .eq('login',u)
+      .eq('ativo',true)
+      .single();
 
     if(error||!data){
       errEl.style.display='block';
@@ -965,6 +968,13 @@ async function doLogin(){
       btn.textContent='Entrar';btn.disabled=false;return;
     }
     errEl.style.display='none';
+
+    // Buscar dados da filial separadamente
+    let filialData = null;
+    if(data.filial_id){
+      const {data:fd} = await supa.from('filiais').select('id,codigo,nome,bandeira_id').eq('id',data.filial_id).single();
+      filialData = fd;
+    }
 
     const perfil=data.perfil;
     const cfg=PERFIL_CONFIG[perfil]||PERFIL_CONFIG.colaborador;
@@ -981,7 +991,7 @@ async function doLogin(){
 
     const filialNome = perfil==='gerente'
       ? (filiaisGerente.length>1 ? filiaisGerente.map(f=>f.codigo).join(' + ') : filiaisGerente[0]?.nome||'—')
-      : data.filiais ? `${data.filiais.codigo} — ${data.filiais.nome}` : 'Todas as Filiais';
+      : filialData ? `${filialData.codigo} — ${filialData.nome}` : 'Todas as Filiais';
 
     currentUser={
       id:data.id, name:data.nome, login:u, cargo:data.cargo||'',
@@ -1007,9 +1017,9 @@ async function doLogin(){
 async function carregarDados(){
   try{
     const [f,c,k]=await Promise.all([
-      supa.from('filiais').select('*, bandeiras(nome,cor_primaria,cor_secundaria)').order('codigo'),
-      supa.from('colaboradores').select('*, filiais(codigo,nome)').eq('ativo',true).order('nome'),
-      supa.from('kpis').select('*, colaboradores(nome,cargo,filial_id)').order('score',{ascending:false}),
+      supa.from('filiais').select('id,codigo,nome,cidade,bandeira_id').order('codigo'),
+      supa.from('colaboradores').select('id,nome,cargo,filial_id,perfil').eq('ativo',true).order('nome'),
+      supa.from('kpis').select('id,colaborador_id,filial_id,mes,ano,vendas_valor,score').order('score',{ascending:false}),
     ]);
     dadosFiliais=f.data||[];
     dadosColaboradores=c.data||[];
